@@ -1,0 +1,36 @@
+--- a/lib/tftp.c (curl-8_14_1)
++++ b/lib/tftp.c (backport of 63dd390fab)
+@@ -546,10 +546,14 @@
+     break;
+ 
+   case TFTP_EVENT_ACK: /* Connected for transmit */
++    if(!data->state.upload)
++      return CURLE_TFTP_ILLEGAL;
+     result = tftp_connect_for_tx(state, event);
+     break;
+ 
+   case TFTP_EVENT_DATA: /* Connected for receive */
++    if(data->state.upload)
++      return CURLE_TFTP_ILLEGAL;
+     result = tftp_connect_for_rx(state, event);
+     break;
+ 
+@@ -709,6 +713,9 @@
+   char *bufptr;
+   bool eos;
+ 
++  if(!data->state.upload)
++    return CURLE_TFTP_ILLEGAL;
++
+   switch(event) {
+ 
+   case TFTP_EVENT_ACK:
+@@ -1113,6 +1120,8 @@
+ 
+     switch(state->event) {
+     case TFTP_EVENT_DATA:
++      if(data->state.upload)
++        return CURLE_TFTP_ILLEGAL;
+       /* Do not pass to the client empty or retransmitted packets */
+       if(state->rbytes > 4 &&
+          (NEXT_BLOCKNUM(state->block) == getrpacketblock(&state->rpacket))) {

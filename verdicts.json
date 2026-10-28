@@ -1,0 +1,559 @@
+[
+ {
+  "release": "bookworm",
+  "patch": "CVE-2023-27534.patch",
+  "cve": "CVE-2023-27534",
+  "verdict": "対象外（大きさ）",
+  "scope": null,
+  "property_changed": null,
+  "external_specs": {},
+  "detail": "",
+  "c_files": [
+   "lib/curl_path.c"
+  ],
+  "changed_lines": 75,
+  "record": "research/backport-proof-debian/cases/bookworm/CVE-2023-27534.json",
+  "notes": null
+ },
+ {
+  "release": "bookworm",
+  "patch": "CVE-2023-27535.patch",
+  "cve": "CVE-2023-27535",
+  "verdict": "対象外（大きさ）",
+  "scope": null,
+  "property_changed": null,
+  "external_specs": {},
+  "detail": "",
+  "c_files": [
+   "lib/ftp.c",
+   "lib/setopt.c",
+   "lib/url.c"
+  ],
+  "changed_lines": 47,
+  "record": "research/backport-proof-debian/cases/bookworm/CVE-2023-27535.json",
+  "notes": null
+ },
+ {
+  "release": "bookworm",
+  "patch": "CVE-2023-27537.patch",
+  "cve": "CVE-2023-27537",
+  "verdict": "C の変更が無い",
+  "scope": null,
+  "property_changed": null,
+  "external_specs": {},
+  "detail": "",
+  "c_files": [],
+  "changed_lines": 0,
+  "record": "research/backport-proof-debian/cases/bookworm/CVE-2023-27537.json",
+  "notes": null
+ },
+ {
+  "release": "bookworm",
+  "patch": "CVE-2023-28321.patch",
+  "cve": "CVE-2023-28321",
+  "verdict": "対象外（大きさ）",
+  "scope": null,
+  "property_changed": null,
+  "external_specs": {},
+  "detail": "",
+  "c_files": [
+   "lib/vtls/hostcheck.c"
+  ],
+  "changed_lines": 50,
+  "record": "research/backport-proof-debian/cases/bookworm/CVE-2023-28321.json",
+  "notes": null
+ },
+ {
+  "release": "bookworm",
+  "patch": "CVE-2023-28322.patch",
+  "cve": "CVE-2023-28322",
+  "verdict": "対象外（大きさ）",
+  "scope": null,
+  "property_changed": null,
+  "external_specs": {},
+  "detail": "",
+  "c_files": [
+   "lib/curl_rtmp.c",
+   "lib/file.c",
+   "lib/ftp.c",
+   "lib/http.c",
+   "lib/imap.c",
+   "lib/rtsp.c",
+   "lib/setopt.c",
+   "lib/smb.c",
+   "lib/smtp.c",
+   "lib/tftp.c",
+   "lib/transfer.c",
+   "lib/vssh/libssh.c",
+   "lib/vssh/libssh2.c",
+   "lib/vssh/wolfssh.c"
+  ],
+  "changed_lines": 72,
+  "record": "research/backport-proof-debian/cases/bookworm/CVE-2023-28322.json",
+  "notes": null
+ },
+ {
+  "release": "bookworm",
+  "patch": "CVE-2023-32001.patch",
+  "cve": "CVE-2023-32001",
+  "verdict": "上流の修正を特定できない",
+  "scope": null,
+  "property_changed": null,
+  "external_specs": {},
+  "detail": "",
+  "c_files": [
+   "lib/fopen.c"
+  ],
+  "changed_lines": 12,
+  "record": "research/backport-proof-debian/cases/bookworm/CVE-2023-32001.json",
+  "notes": null
+ },
+ {
+  "release": "bookworm",
+  "patch": "CVE-2023-38039.patch",
+  "cve": "CVE-2023-38039",
+  "verdict": "対象外（大きさ）",
+  "scope": null,
+  "property_changed": null,
+  "external_specs": {},
+  "detail": "",
+  "c_files": [
+   "lib/c-hyper.c",
+   "lib/http.c",
+   "lib/http_proxy.c",
+   "lib/pingpong.c"
+  ],
+  "changed_lines": 54,
+  "record": "research/backport-proof-debian/cases/bookworm/CVE-2023-38039.json",
+  "notes": null
+ },
+ {
+  "release": "bookworm",
+  "patch": "CVE-2023-38546.patch",
+  "cve": "CVE-2023-38546",
+  "verdict": "対象外（大きさ）",
+  "scope": null,
+  "property_changed": null,
+  "external_specs": {},
+  "detail": "",
+  "c_files": [
+   "lib/cookie.c",
+   "lib/easy.c"
+  ],
+  "changed_lines": 17,
+  "record": "research/backport-proof-debian/cases/bookworm/CVE-2023-38546.json",
+  "notes": null
+ },
+ {
+  "release": "bookworm",
+  "patch": "CVE-2023-46219.patch",
+  "cve": "CVE-2023-46219",
+  "verdict": "対象外（大きさ）",
+  "scope": null,
+  "property_changed": null,
+  "external_specs": {},
+  "detail": "",
+  "c_files": [
+   "lib/fopen.c"
+  ],
+  "changed_lines": 65,
+  "record": "research/backport-proof-debian/cases/bookworm/CVE-2023-46219.json",
+  "notes": null
+ },
+ {
+  "release": "bookworm",
+  "patch": "CVE-2024-11053.patch",
+  "cve": "CVE-2024-11053",
+  "verdict": "対象外（大きさ）",
+  "scope": null,
+  "property_changed": null,
+  "external_specs": {},
+  "detail": "",
+  "c_files": [
+   "lib/netrc.c",
+   "lib/url.c"
+  ],
+  "changed_lines": 201,
+  "record": "research/backport-proof-debian/cases/bookworm/CVE-2024-11053.json",
+  "notes": null
+ },
+ {
+  "release": "bookworm",
+  "patch": "CVE-2024-8096.patch",
+  "cve": "CVE-2024-8096",
+  "verdict": "対象外（大きさ）",
+  "scope": null,
+  "property_changed": null,
+  "external_specs": {},
+  "detail": "",
+  "c_files": [
+   "lib/vtls/gtls.c"
+  ],
+  "changed_lines": 146,
+  "record": "research/backport-proof-debian/cases/bookworm/CVE-2024-8096.json",
+  "notes": null
+ },
+ {
+  "release": "bookworm",
+  "patch": "CVE-2025-14819.patch",
+  "cve": "CVE-2025-14819",
+  "verdict": "同じ性質",
+  "scope": "すべての入力",
+  "property_changed": false,
+  "external_specs": {
+   "U1": 2,
+   "U0": 1,
+   "D1": 2,
+   "D0": 1
+  },
+  "detail": "",
+  "c_files": null,
+  "changed_lines": null,
+  "record": "research/backport-proof-debian/cases/bookworm/CVE-2025-14819.json",
+  "notes": "research/backport-proof-debian/cases/bookworm/CVE-2025-14819.md"
+ },
+ {
+  "release": "bookworm",
+  "patch": "CVE-2026-5773.patch",
+  "cve": "CVE-2026-5773",
+  "verdict": "上流と仕組みが違う",
+  "scope": null,
+  "property_changed": null,
+  "external_specs": {},
+  "detail": "up_in_deb 0.00 < 0.5",
+  "c_files": [
+   "lib/smb.c"
+  ],
+  "changed_lines": 6,
+  "record": "research/backport-proof-debian/cases/bookworm/CVE-2026-5773.json",
+  "notes": null
+ },
+ {
+  "release": "trixie",
+  "patch": "CVE-2025-10148.patch",
+  "cve": "CVE-2025-10148",
+  "verdict": "同じ性質",
+  "scope": "場面を絞った（payload_len が負でない、payload_remain が正でない、を前提に置いた）",
+  "property_changed": true,
+  "external_specs": {
+   "U1": 6,
+   "U0": 5,
+   "D1": 6,
+   "D0": 5
+  },
+  "detail": "",
+  "c_files": null,
+  "changed_lines": null,
+  "record": "research/backport-proof-debian/cases/CVE-2025-10148.json",
+  "notes": "research/backport-proof-debian/cases/CVE-2025-10148.md"
+ },
+ {
+  "release": "trixie",
+  "patch": "CVE-2025-14524.patch",
+  "cve": "CVE-2025-14524",
+  "verdict": "同じ性質",
+  "scope": "場面を絞った（Curl_sasl_start だけ。Debian が直した Curl_sasl_continue は証明していない。P0 に sasl_ir=1 などの前提を足した）",
+  "property_changed": true,
+  "external_specs": {
+   "U1": 3,
+   "U0": 5,
+   "D1": 3,
+   "D0": 4
+  },
+  "detail": "",
+  "c_files": null,
+  "changed_lines": null,
+  "record": "research/backport-proof-debian/cases/CVE-2025-14524.json",
+  "notes": "research/backport-proof-debian/cases/CVE-2025-14524.md"
+ },
+ {
+  "release": "trixie",
+  "patch": "CVE-2025-14819.patch",
+  "cve": "CVE-2025-14819",
+  "verdict": "同じ性質",
+  "scope": "すべての入力",
+  "property_changed": false,
+  "external_specs": {
+   "U1": 2,
+   "U0": 1,
+   "D1": 2,
+   "D0": 1
+  },
+  "detail": "",
+  "c_files": null,
+  "changed_lines": null,
+  "record": "research/backport-proof-debian/cases/CVE-2025-14819.json",
+  "notes": "research/backport-proof-debian/cases/CVE-2025-14819.md"
+ },
+ {
+  "release": "trixie",
+  "patch": "CVE-2026-1965_1.patch",
+  "cve": "CVE-2026-1965",
+  "verdict": "対象外（大きさ）",
+  "scope": null,
+  "property_changed": null,
+  "external_specs": {},
+  "detail": "",
+  "c_files": [
+   "lib/url.c"
+  ],
+  "changed_lines": 87,
+  "record": "research/backport-proof-debian/cases/trixie/CVE-2026-1965_1.json",
+  "notes": null
+ },
+ {
+  "release": "trixie",
+  "patch": "CVE-2026-1965_2.patch",
+  "cve": "CVE-2026-1965",
+  "verdict": "同じ性質",
+  "scope": "場面を絞った（_2 が直した規則だけ。CVE の本体の資格情報の照合は _1 にあり対象外）",
+  "property_changed": false,
+  "external_specs": {
+   "U1": 1,
+   "U0": 1,
+   "D1": 1,
+   "D0": 1
+  },
+  "detail": "",
+  "c_files": null,
+  "changed_lines": null,
+  "record": "research/backport-proof-debian/cases/CVE-2026-1965_2.json",
+  "notes": "research/backport-proof-debian/cases/CVE-2026-1965.md"
+ },
+ {
+  "release": "trixie",
+  "patch": "CVE-2026-3783.patch",
+  "cve": "CVE-2026-3783",
+  "verdict": "同じ性質",
+  "scope": "すべての入力",
+  "property_changed": false,
+  "external_specs": {
+   "U1": 1,
+   "U0": 3,
+   "D1": 1,
+   "D0": 3
+  },
+  "detail": "",
+  "c_files": null,
+  "changed_lines": null,
+  "record": "research/backport-proof-debian/cases/CVE-2026-3783.json",
+  "notes": "research/backport-proof-debian/cases/CVE-2026-3783.md"
+ },
+ {
+  "release": "trixie",
+  "patch": "CVE-2026-3784.patch",
+  "cve": "CVE-2026-3784",
+  "verdict": "同じ性質",
+  "scope": "すべての入力",
+  "property_changed": false,
+  "external_specs": {
+   "U1": 2,
+   "U0": 1,
+   "D1": 2,
+   "D0": 1
+  },
+  "detail": "",
+  "c_files": null,
+  "changed_lines": null,
+  "record": "research/backport-proof-debian/cases/CVE-2026-3784.json",
+  "notes": "research/backport-proof-debian/cases/CVE-2026-3784.md"
+ },
+ {
+  "release": "trixie",
+  "patch": "CVE-2026-3805.patch",
+  "cve": "CVE-2026-3805",
+  "verdict": "同じ性質",
+  "scope": "すべての入力",
+  "property_changed": false,
+  "external_specs": {
+   "U1": 5,
+   "U0": 4,
+   "D1": 5,
+   "D0": 4
+  },
+  "detail": "",
+  "c_files": null,
+  "changed_lines": null,
+  "record": "research/backport-proof-debian/cases/CVE-2026-3805.json",
+  "notes": "research/backport-proof-debian/cases/CVE-2026-3805.md"
+ },
+ {
+  "release": "trixie",
+  "patch": "CVE-2026-4873.patch",
+  "cve": "CVE-2026-4873",
+  "verdict": "同じ性質",
+  "scope": "すべての入力",
+  "property_changed": false,
+  "external_specs": {
+   "U1": 1,
+   "U0": 1,
+   "D1": 1,
+   "D0": 1
+  },
+  "detail": "",
+  "c_files": null,
+  "changed_lines": null,
+  "record": "research/backport-proof-debian/cases/CVE-2026-4873.json",
+  "notes": "research/backport-proof-debian/cases/CVE-2026-4873.md"
+ },
+ {
+  "release": "trixie",
+  "patch": "CVE-2026-5545.patch",
+  "cve": "CVE-2026-5545",
+  "verdict": "同じ性質",
+  "scope": "すべての入力",
+  "property_changed": false,
+  "external_specs": {
+   "U1": 1,
+   "U0": 1,
+   "D1": 1,
+   "D0": 1
+  },
+  "detail": "",
+  "c_files": null,
+  "changed_lines": null,
+  "record": "research/backport-proof-debian/cases/CVE-2026-5545.json",
+  "notes": "research/backport-proof-debian/cases/CVE-2026-5545.md"
+ },
+ {
+  "release": "trixie",
+  "patch": "CVE-2026-5773.patch",
+  "cve": "CVE-2026-5773",
+  "verdict": "上流と仕組みが違う",
+  "scope": null,
+  "property_changed": null,
+  "external_specs": {},
+  "detail": "",
+  "c_files": null,
+  "changed_lines": null,
+  "record": "research/backport-proof-debian/cases/CVE-2026-5773.json",
+  "notes": "research/backport-proof-debian/cases/CVE-2026-5773.md"
+ },
+ {
+  "release": "trixie",
+  "patch": "CVE-2026-6253.patch",
+  "cve": "CVE-2026-6253",
+  "verdict": "対象外（大きさ）",
+  "scope": null,
+  "property_changed": null,
+  "external_specs": {},
+  "detail": "",
+  "c_files": [
+   "lib/http.c",
+   "lib/transfer.c"
+  ],
+  "changed_lines": 63,
+  "record": "research/backport-proof-debian/cases/trixie/CVE-2026-6253.json",
+  "notes": null
+ },
+ {
+  "release": "trixie",
+  "patch": "CVE-2026-6276.patch",
+  "cve": "CVE-2026-6276",
+  "verdict": "対象外（大きさ）",
+  "scope": null,
+  "property_changed": null,
+  "external_specs": {},
+  "detail": "",
+  "c_files": [
+   "lib/http.c",
+   "lib/request.c",
+   "lib/url.c"
+  ],
+  "changed_lines": 19,
+  "record": "research/backport-proof-debian/cases/trixie/CVE-2026-6276.json",
+  "notes": null
+ },
+ {
+  "release": "trixie",
+  "patch": "CVE-2026-6429.patch",
+  "cve": "CVE-2026-6429",
+  "verdict": "対象外（大きさ）",
+  "scope": null,
+  "property_changed": null,
+  "external_specs": {},
+  "detail": "",
+  "c_files": [
+   "lib/http.c"
+  ],
+  "changed_lines": 77,
+  "record": "research/backport-proof-debian/cases/trixie/CVE-2026-6429.json",
+  "notes": null
+ },
+ {
+  "release": "trixie",
+  "patch": "CVE-2026-7168.patch",
+  "cve": "CVE-2026-7168",
+  "verdict": "同じ性質",
+  "scope": "場面を絞った（option が CURLOPT_PROXY で、前と新しいプロキシ文字列がどちらも NULL でない）",
+  "property_changed": false,
+  "external_specs": {
+   "U1": 4,
+   "U0": 1,
+   "D1": 4,
+   "D0": 1
+  },
+  "detail": "",
+  "c_files": null,
+  "changed_lines": null,
+  "record": "research/backport-proof-debian/cases/CVE-2026-7168.json",
+  "notes": "research/backport-proof-debian/cases/CVE-2026-7168.md"
+ },
+ {
+  "release": "trixie",
+  "patch": "CVE-2026-8286.patch",
+  "cve": "CVE-2026-8286",
+  "verdict": "同じ性質",
+  "scope": "すべての入力",
+  "property_changed": false,
+  "external_specs": {
+   "U1": 2,
+   "U0": 2,
+   "D1": 2,
+   "D0": 2
+  },
+  "detail": "",
+  "c_files": null,
+  "changed_lines": null,
+  "record": "research/backport-proof-debian/cases/CVE-2026-8286.json",
+  "notes": "research/backport-proof-debian/cases/CVE-2026-8286.md"
+ },
+ {
+  "release": "trixie",
+  "patch": "CVE-2026-8924.patch",
+  "cve": "CVE-2026-8924",
+  "verdict": "同じ性質",
+  "scope": "場面を絞った（dlen・clen を2以上にし、P0 では clen を256未満にした）",
+  "property_changed": true,
+  "external_specs": {
+   "U1": 8,
+   "U0": 8,
+   "D1": 8,
+   "D0": 8
+  },
+  "detail": "",
+  "c_files": null,
+  "changed_lines": null,
+  "record": "research/backport-proof-debian/cases/CVE-2026-8924.json",
+  "notes": "research/backport-proof-debian/cases/CVE-2026-8924.md"
+ },
+ {
+  "release": "trixie",
+  "patch": "CVE-2026-8927.patch",
+  "cve": "CVE-2026-8927",
+  "verdict": "同じ性質",
+  "scope": "場面を絞った（環境変数から HTTP プロキシを読む経路、場面 S）",
+  "property_changed": false,
+  "external_specs": {
+   "U1": 7,
+   "U0": 4,
+   "D1": 7,
+   "D0": 4
+  },
+  "detail": "",
+  "c_files": null,
+  "changed_lines": null,
+  "record": "research/backport-proof-debian/cases/CVE-2026-8927.json",
+  "notes": "research/backport-proof-debian/cases/CVE-2026-8927.md"
+ }
+]

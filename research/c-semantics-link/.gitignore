@@ -1,0 +1,7 @@
+# lake のビルド成果物
+lean/.lake/
+# clightgen を case5/ で直接走らせたときの出力（lean/Gen*.lean が正）
+case5/*.lean
+lean/Probe*.lean
+# clightgen を deb*/ で直接走らせたときの出力（lean/Gen*.lean が正）
+deb*/*.lean

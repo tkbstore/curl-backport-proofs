@@ -1,0 +1,74 @@
+{
+ "patch": "CVE-2025-14819.patch",
+ "cve": "CVE-2025-14819",
+ "branch": "debian/bookworm",
+ "debian_commit": "81506830759fcf08d13ff6e36b5e3c8a8d6dee12",
+ "verdict": null,
+ "detail": "",
+ "debian_version": "7.88.1-10+deb12u15",
+ "base_tag": "curl-7_88_1",
+ "upstream_fixed": "cd046f6c93b39d673a58c18648d8906e954c4f5d",
+ "upstream_parent": "be3c226bb0c4b73879a6dffbb35f60065a48a9a2",
+ "debian_patch_sha256": "373b80a196f29007c4369f754d04df4bc92305525cd039e18e90a59e3673d1d4",
+ "target_file": "lib/vtls/openssl.c",
+ "series_applied": [
+  {
+   "patch": "CVE-2025-14819.patch",
+   "sha256": "373b80a196f29007c4369f754d04df4bc92305525cd039e18e90a59e3673d1d4"
+  }
+ ],
+ "files": {
+  "U0": {
+   "lib/vtls/openssl.c": "2a06ac1123968c6df23d68b68435664ec32853ebf443955070e030d12c4e5fba"
+  },
+  "U1": {
+   "lib/vtls/openssl.c": "ccc495acfddccefb036356eae46ea28b7e9ac9a11a9551d9207dc6ebae4747e0"
+  },
+  "D0": {
+   "lib/vtls/openssl.c": "82e9e76ce2957cc4e30cf6d057ee55fc19ad5746d63f6b0b04d8d3c748124dd9"
+  },
+  "D1": {
+   "lib/vtls/openssl.c": "926b585b7eb9e7fa0884a17628c2830f9a2be1fdd6aaff7107fb14284188aa35"
+  }
+ },
+ "functions": {
+  "U": [
+   {
+    "name": "ossl_cached_x509_store_different",
+    "before": true,
+    "after": true
+   },
+   {
+    "name": "ossl_get_cached_x509_store",
+    "before": true,
+    "after": true
+   },
+   {
+    "name": "ossl_set_cached_x509_store",
+    "before": true,
+    "after": true
+   }
+  ],
+  "D": [
+   {
+    "name": "cached_x509_store_different",
+    "before": true,
+    "after": true
+   },
+   {
+    "name": "get_cached_x509_store",
+    "before": true,
+    "after": true
+   },
+   {
+    "name": "set_cached_x509_store",
+    "before": true,
+    "after": true
+   }
+  ]
+ },
+ "changes_outside_functions": {
+  "U": 1,
+  "D": 1
+ }
+}

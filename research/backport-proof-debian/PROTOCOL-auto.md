@@ -100,6 +100,25 @@ Lean のモジュールの頭も `Deb<リリース>`（例 `DebBookworm2025_1481
 
 `verdict` は §3.6 の表の文言のどれか。`scope` は、P1・P0 の文に、その件のために前提を足したり対象の関数の一部だけを扱ったりしたなら「場面を絞った（理由を1行）」、していなければ「すべての入力」。定理が無い件は null。`property_changed` は、性質をコミットしたあとに性質の文を変えたか（定理が無い件は null）。`theorems` は判定の根拠になる主な定理の完全な名前。`d_functions` は D の定理が指すべき Clight の関数の完全な名前。
 
+### 3.9 性質の読み直し（`auto/review.py`）
+
+Lean が保証するのは「書いた性質が成り立つ」までで、その性質が脆弱性を捉えているかは保証しない。そこで証明のジョブの後に、別の `claude -p` に性質を読ませる。
+- 渡すのは `cases/…md` の「結果」の節より前だけ（成否を知らせない）と、curl の advisory・Debian のパッチ・上流の修正・4つの C ファイル。道具は読み取りだけ
+- 問いは4つに固定する: P1 が修正後に脆弱性が起きないことを述べているか、P0 が修正前に起きる入力があることを述べているか、前提の絞り込みが脆弱性の経路を外していないか、外部仕様の仮定が脆弱性に関わる振る舞いを決めてしまっていないか
+- 答えは `prove.json` の `review` に入り、`VERDICTS.md` の Read-back の列に「指摘なし／指摘あり（問いの名前）／読み直しできず」として出る
+- **判定は変えない**。読む側も AI なので、判定を覆す権限は与えず、指摘をそのまま公開する
+
+### 3.10 P0 を修正後の関数で述べ直す（`p0_on_fixed`）
+
+P0 が修正後の関数でも成り立つなら、P0 は修正の前と後を見分けておらず、修正前にバグがあることを示していない。これは読ませなくても Lean で確かめられる。
+- 述べ方: P0 の定理の関数と仕様を修正後のもの（U1、D1）に置き換える。修正後にだけある引数やメモリ（足された欄など）は、P0 の入力と同じ量化子（∃ なら ∃）の側に入れる。
+  事後条件（悪い出来事）は P0 のまま変えない
+- 成り立ったら、件の記録に `"p0_on_fixed": "成立"` と、その定理を `theorems.P0_on_fixed` に書く。§4 の確認を他の定理と同じく受ける。
+  試して成り立たなかったら `"示せず"`。これは P0 が見分けることの証明ではない。試していなければ欄を置かない
+- `VERDICTS.md` の P0 on fixed の列に出す。**判定は変えない**（§3.6 の「同じ性質」の条件は4つの定理が成り立つことで、これは変わらない）
+- 実例: trixie の CVE-2025-14819。`mb->no_partialchain` も 1 を選ぶと修正後の関数も FALSE を返す（`Deb2025_14819X.P0_on_after`、1回目の build で成立）。
+  読み直し（§3.9）は bookworm の同じ形の P0 には指摘を出し、trixie には出さなかった
+
 ## 4. 機械的な確認
 
 - 統合したツリーで `lake build` が成功する
@@ -118,6 +137,10 @@ Lean のモジュールの頭も `Deb<リリース>`（例 `DebBookworm2025_1481
 - 公開: `publish/publish.py`。`export.py` の写しで公開リポジトリの中身を置き換え、`state/`・`VERDICTS.md`・`verdicts.json` を足して push する
 - `state/` に入れるのは、その回で判定まで行ったパッチだけ。`--max-proofs` で残した件は次の回にもう一度検知される
 - 定期実行: `auto/scheduled.sh install <公開リポジトリの clone>` が launchd に毎日 03:00 の実行を登録する。ログは `~/.local/share/curl-backport-proofs/logs/`
+- 置き場所: launchd から `~/Documents` の下は読めない（macOS の TCC。exit 126、`Operation not permitted`）。そのため、パイプライン専用の clone を
+  `~/.local/share/curl-backport-proofs/src/atrium-lean4`、公開リポジトリの clone を `…/src/curl-backport-proofs`、CompCert/clean を `…/_vendor/certora-clean` に置く
+  （`lakefile.toml` の require が5つ上の `_vendor` を指すため）。コードは毎回 GitHub の `auto/pipeline` から pull する。
+  スリープ中に過ぎた 03:00 は次に起きたときに1回だけ走り、電源が切れていた日は飛ぶ。未判定の件は次の回に残る
 
 ## 6. この仕組みの限界
 

@@ -1,11 +1,16 @@
 [
  {
+  "review": null,
+  "review_problems": [],
+  "review_summary": "",
   "release": "bookworm",
   "patch": "CVE-2023-27534.patch",
   "cve": "CVE-2023-27534",
   "verdict": "対象外（大きさ）",
   "scope": null,
   "property_changed": null,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {},
   "detail": "",
   "c_files": [
@@ -16,12 +21,17 @@
   "notes": null
  },
  {
+  "review": null,
+  "review_problems": [],
+  "review_summary": "",
   "release": "bookworm",
   "patch": "CVE-2023-27535.patch",
   "cve": "CVE-2023-27535",
   "verdict": "対象外（大きさ）",
   "scope": null,
   "property_changed": null,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {},
   "detail": "",
   "c_files": [
@@ -34,12 +44,17 @@
   "notes": null
  },
  {
+  "review": null,
+  "review_problems": [],
+  "review_summary": "",
   "release": "bookworm",
   "patch": "CVE-2023-27537.patch",
   "cve": "CVE-2023-27537",
   "verdict": "C の変更が無い",
   "scope": null,
   "property_changed": null,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {},
   "detail": "",
   "c_files": [],
@@ -48,12 +63,17 @@
   "notes": null
  },
  {
+  "review": null,
+  "review_problems": [],
+  "review_summary": "",
   "release": "bookworm",
   "patch": "CVE-2023-28321.patch",
   "cve": "CVE-2023-28321",
   "verdict": "対象外（大きさ）",
   "scope": null,
   "property_changed": null,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {},
   "detail": "",
   "c_files": [
@@ -64,12 +84,17 @@
   "notes": null
  },
  {
+  "review": null,
+  "review_problems": [],
+  "review_summary": "",
   "release": "bookworm",
   "patch": "CVE-2023-28322.patch",
   "cve": "CVE-2023-28322",
   "verdict": "対象外（大きさ）",
   "scope": null,
   "property_changed": null,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {},
   "detail": "",
   "c_files": [
@@ -93,12 +118,17 @@
   "notes": null
  },
  {
+  "review": null,
+  "review_problems": [],
+  "review_summary": "",
   "release": "bookworm",
   "patch": "CVE-2023-32001.patch",
   "cve": "CVE-2023-32001",
   "verdict": "上流の修正を特定できない",
   "scope": null,
   "property_changed": null,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {},
   "detail": "",
   "c_files": [
@@ -109,12 +139,17 @@
   "notes": null
  },
  {
+  "review": null,
+  "review_problems": [],
+  "review_summary": "",
   "release": "bookworm",
   "patch": "CVE-2023-38039.patch",
   "cve": "CVE-2023-38039",
   "verdict": "対象外（大きさ）",
   "scope": null,
   "property_changed": null,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {},
   "detail": "",
   "c_files": [
@@ -128,12 +163,17 @@
   "notes": null
  },
  {
+  "review": null,
+  "review_problems": [],
+  "review_summary": "",
   "release": "bookworm",
   "patch": "CVE-2023-38546.patch",
   "cve": "CVE-2023-38546",
   "verdict": "対象外（大きさ）",
   "scope": null,
   "property_changed": null,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {},
   "detail": "",
   "c_files": [
@@ -145,12 +185,17 @@
   "notes": null
  },
  {
+  "review": null,
+  "review_problems": [],
+  "review_summary": "",
   "release": "bookworm",
   "patch": "CVE-2023-46219.patch",
   "cve": "CVE-2023-46219",
   "verdict": "対象外（大きさ）",
   "scope": null,
   "property_changed": null,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {},
   "detail": "",
   "c_files": [
@@ -161,12 +206,17 @@
   "notes": null
  },
  {
+  "review": null,
+  "review_problems": [],
+  "review_summary": "",
   "release": "bookworm",
   "patch": "CVE-2024-11053.patch",
   "cve": "CVE-2024-11053",
   "verdict": "対象外（大きさ）",
   "scope": null,
   "property_changed": null,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {},
   "detail": "",
   "c_files": [
@@ -178,12 +228,17 @@
   "notes": null
  },
  {
+  "review": null,
+  "review_problems": [],
+  "review_summary": "",
   "release": "bookworm",
   "patch": "CVE-2024-8096.patch",
   "cve": "CVE-2024-8096",
   "verdict": "対象外（大きさ）",
   "scope": null,
   "property_changed": null,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {},
   "detail": "",
   "c_files": [
@@ -194,12 +249,19 @@
   "notes": null
  },
  {
+  "review": "指摘あり",
+  "review_problems": [
+   "p0_states_bug"
+  ],
+  "review_summary": "P1 からは、修正後の判定関数（上流・Debian とも）が「記録された no_partialchain と今の設定が違えばキャッシュを使わない」と言える。一方で、記録側（set_cached_x509_store）が正しい値を書くことは示していない。P0 の関数は ssl_config を読まないので、P0 は実質「CAfile が両方 NULL なら 0」で、これは修正後でも成り立つ。修正前に設定の違いが無視されることは、この P0 からは言えない。",
   "release": "bookworm",
   "patch": "CVE-2025-14819.patch",
   "cve": "CVE-2025-14819",
   "verdict": "同じ性質",
   "scope": "すべての入力",
   "property_changed": false,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {
    "U1": 2,
    "U0": 1,
@@ -213,12 +275,17 @@
   "notes": "research/backport-proof-debian/cases/bookworm/CVE-2025-14819.md"
  },
  {
+  "review": null,
+  "review_problems": [],
+  "review_summary": "",
   "release": "bookworm",
   "patch": "CVE-2026-5773.patch",
   "cve": "CVE-2026-5773",
   "verdict": "上流と仕組みが違う",
   "scope": null,
   "property_changed": null,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {},
   "detail": "up_in_deb 0.00 < 0.5",
   "c_files": [
@@ -229,12 +296,17 @@
   "notes": null
  },
  {
+  "review": "指摘なし",
+  "review_problems": [],
+  "review_summary": "この性質で言えるのは、修正後は送るフレームのヘッダのマスクが毎回その呼び出しで Curl_rand から新しく取った値になること、修正前は入口の enc->mask がそのまま使われ、接続中のフレームで同じマスクが使い回されることです。言えないのは次の3点です。乱数として予測できないかどうか、ペイロードの XOR に同じ新しいマスクが使われるか（戻ったあとの enc->mask = r は P1 にない）、修正前に mask に書くのが Curl_ws_accept だけであること（これは Lean の外の主張）。",
   "release": "trixie",
   "patch": "CVE-2025-10148.patch",
   "cve": "CVE-2025-10148",
   "verdict": "同じ性質",
   "scope": "場面を絞った（payload_len が負でない、payload_remain が正でない、を前提に置いた）",
   "property_changed": true,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {
    "U1": 6,
    "U0": 5,
@@ -248,12 +320,17 @@
   "notes": "research/backport-proof-debian/cases/CVE-2025-10148.md"
  },
  {
+  "review": "指摘なし",
+  "review_problems": [],
+  "review_summary": "リダイレクト後に許可が無く、サーバーが OAuth の方式だけを示す場合について、修正後の Curl_sasl_start が OAUTHBEARER・XOAUTH2 のメッセージを作らず送信もしないこと、修正前は Bearer を引数にして作ることが言える。一方、OAuth と PLAIN・LOGIN・EXTERNAL を一緒に示された場合と、Debian が独自に条件を足した Curl_sasl_continue については、この性質では何も言えない。",
   "release": "trixie",
   "patch": "CVE-2025-14524.patch",
   "cve": "CVE-2025-14524",
   "verdict": "同じ性質",
   "scope": "場面を絞った（Curl_sasl_start だけ。Debian が直した Curl_sasl_continue は証明していない。P0 に sasl_ir=1 などの前提を足した）",
   "property_changed": true,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {
    "U1": 3,
    "U0": 5,
@@ -267,12 +344,20 @@
   "notes": "research/backport-proof-debian/cases/CVE-2025-14524.md"
  },
  {
+  "review": "指摘なし",
+  "review_problems": [],
+  "review_summary": "この性質で言えるのは次のこと。Debian trixie のパッチを当てた後のキャッシュ判定関数は、ストアを作ったときの no_partialchain の記録が今の設定と違えばキャッシュを使わない判定を返す。パッチを当てる前は、部分的な鎖を禁じていてもキャッシュを使う判定を返す。言えないのは、記録側（ossl_set_cached_x509_store）が正しい値を書くことと、その先で部分的な鎖の証明書が実際に拒否されることで、どちらも仮定か対象外になっている。また、仮定にある no_partialchain のビット位置（cfgWord のビット0）が実際の構造体と一致するかは、Lean 側の構造体定義を見て確かめる必要がある。",
   "release": "trixie",
   "patch": "CVE-2025-14819.patch",
   "cve": "CVE-2025-14819",
   "verdict": "同じ性質",
   "scope": "すべての入力",
   "property_changed": false,
+  "p0_on_fixed": "成立",
+  "p0_on_fixed_theorems": [
+   "Deb2025_14819X.P0_on_after",
+   "Deb2025_14819X.P0_on_debian_after"
+  ],
   "external_specs": {
    "U1": 2,
    "U0": 1,
@@ -286,12 +371,17 @@
   "notes": "research/backport-proof-debian/cases/CVE-2025-14819.md"
  },
  {
+  "review": null,
+  "review_problems": [],
+  "review_summary": "",
   "release": "trixie",
   "patch": "CVE-2026-1965_1.patch",
   "cve": "CVE-2026-1965",
   "verdict": "対象外（大きさ）",
   "scope": null,
   "property_changed": null,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {},
   "detail": "",
   "c_files": [
@@ -302,12 +392,20 @@
   "notes": null
  },
  {
+  "review": "指摘あり",
+  "review_problems": [
+   "p1_states_fix",
+   "p0_states_bug"
+  ],
+  "review_summary": "この性質で言えるのは、_2 が直した条件の写し間違いについてだけです。修正後は Negotiate を求める要求が Negotiate 済みの接続でなければ受け入れられず（P1）、修正前は Negotiate していない接続を即座に受け入れる入力がある（P0）。CVE 本体の『別の認証情報で Negotiate 済みの接続を再利用する』ことが起きないかどうかは _1 の認証情報の照合が担っており、この性質からは何も言えません。",
   "release": "trixie",
   "patch": "CVE-2026-1965_2.patch",
   "cve": "CVE-2026-1965",
   "verdict": "同じ性質",
   "scope": "場面を絞った（_2 が直した規則だけ。CVE の本体の資格情報の照合は _1 にあり対象外）",
   "property_changed": false,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {
    "U1": 1,
    "U0": 1,
@@ -321,12 +419,17 @@
   "notes": "research/backport-proof-debian/cases/CVE-2026-1965.md"
  },
  {
+  "review": "指摘なし",
+  "review_problems": [],
+  "review_summary": "この性質で言えることは次のとおり。Debian（D1）と上流（U1）の修正後の `output_auth_headers` は、`Curl_auth_allowed_to_host` が偽のとき（netrc 経由でリダイレクト先のホストに入る場面を含む）、Bearer トークンのヘッダーを作る `http_output_bearer` を呼ばない。修正前の関数は同じ状況で呼ぶ。言えないことは2つある。`Curl_auth_allowed_to_host` が別ホストを正しく偽と判定するか、組み立てた userpwd が実際に送信されるか、は証明の範囲外である。",
   "release": "trixie",
   "patch": "CVE-2026-3783.patch",
   "cve": "CVE-2026-3783",
   "verdict": "同じ性質",
   "scope": "すべての入力",
   "property_changed": false,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {
    "U1": 1,
    "U0": 3,
@@ -340,12 +443,17 @@
   "notes": "research/backport-proof-debian/cases/CVE-2026-3783.md"
  },
  {
+  "review": "指摘なし",
+  "review_problems": [],
+  "review_summary": "言えるのは次のこと。修正後（上流・Debian とも）の proxy_info_matches は、Curl_timestrcmp が user と passwd の両方で 0（同じ）を返したときにしか真を返さない。修正前は資格情報が違っても真を返す入力がある。言えないのは次のこと。url_match_proxy_use がこの戻り値で HTTP プロキシの接続を再利用するかを決めるというつなぎ目は、ソースを読んだうえでの前提で、証明されていない。Curl_timestrcmp の実装が正しく比べることも、証明の外にある。",
   "release": "trixie",
   "patch": "CVE-2026-3784.patch",
   "cve": "CVE-2026-3784",
   "verdict": "同じ性質",
   "scope": "すべての入力",
   "property_changed": false,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {
    "U1": 2,
    "U0": 1,
@@ -359,12 +467,17 @@
   "notes": "research/backport-proof-debian/cases/CVE-2026-3784.md"
  },
  {
+  "review": "指摘なし",
+  "review_problems": [],
+  "review_summary": "言えるのは、修正前の smb_parse_url_path では req->path が smbc->share と同じブロックの途中を指す入力（'s/f'）があり（P0）、修正後は成功時に2つが別々に所有されたブロックを指す（P1）、という原因の除去までです。conn の破棄で share が解放されたあと smb_send_open が req->path を読む、という解放後使用そのものは、証明の外にある2つの関数と文書の推論に頼っており、Lean の定理としては言えていません。",
   "release": "trixie",
   "patch": "CVE-2026-3805.patch",
   "cve": "CVE-2026-3805",
   "verdict": "同じ性質",
   "scope": "すべての入力",
   "property_changed": false,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {
    "U1": 5,
    "U0": 4,
@@ -378,12 +491,17 @@
   "notes": "research/backport-proof-debian/cases/CVE-2026-3805.md"
  },
  {
+  "review": "指摘なし",
+  "review_problems": [],
+  "review_summary": "言えること：TLS 必須のフラグ req_tls が立っていれば、修正後（上流・Debian とも）の url_match_ssl_use は平文の STARTTLS 接続を再利用の候補から外す。修正前は平文の接続をそのまま通す。言えないこと：use_ssl >= CURLUSESSL_CONTROL のときに req_tls が実際に立つこと（ConnectionExists に追加された1行）は仮定であり、証明していない。また修正前の D0 には req_tls が無いので、P0 の「req_tls=1」は D0 では実在しないビットを指している。",
   "release": "trixie",
   "patch": "CVE-2026-4873.patch",
   "cve": "CVE-2026-4873",
   "verdict": "同じ性質",
   "scope": "すべての入力",
   "property_changed": false,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {
    "U1": 1,
    "U0": 1,
@@ -397,12 +515,17 @@
   "notes": "research/backport-proof-debian/cases/CVE-2026-4873.md"
  },
  {
+  "review": "指摘なし",
+  "review_problems": [],
+  "review_summary": "言えるのは、url_match_auth_ntlm 単体について2点。修正前は、NTLM を求める要求で認証情報が違うとき、Negotiate 済みの接続を再利用候補（m->found）にする入力がある。修正後（U1・D1）は、そういう接続を候補にしない。言えないのは、プロキシ側の Negotiate と、候補が url_match_conn の呼び出し側で実際に再利用に使われるところまでで、そこは関数の外なので範囲に入っていない。",
   "release": "trixie",
   "patch": "CVE-2026-5545.patch",
   "cve": "CVE-2026-5545",
   "verdict": "同じ性質",
   "scope": "すべての入力",
   "property_changed": false,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {
    "U1": 1,
    "U0": 1,
@@ -416,12 +539,17 @@
   "notes": "research/backport-proof-debian/cases/CVE-2026-5545.md"
  },
  {
+  "review": null,
+  "review_problems": [],
+  "review_summary": "",
   "release": "trixie",
   "patch": "CVE-2026-5773.patch",
   "cve": "CVE-2026-5773",
   "verdict": "上流と仕組みが違う",
   "scope": null,
   "property_changed": null,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {},
   "detail": "",
   "c_files": null,
@@ -430,12 +558,17 @@
   "notes": "research/backport-proof-debian/cases/CVE-2026-5773.md"
  },
  {
+  "review": null,
+  "review_problems": [],
+  "review_summary": "",
   "release": "trixie",
   "patch": "CVE-2026-6253.patch",
   "cve": "CVE-2026-6253",
   "verdict": "対象外（大きさ）",
   "scope": null,
   "property_changed": null,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {},
   "detail": "",
   "c_files": [
@@ -447,12 +580,17 @@
   "notes": null
  },
  {
+  "review": null,
+  "review_problems": [],
+  "review_summary": "",
   "release": "trixie",
   "patch": "CVE-2026-6276.patch",
   "cve": "CVE-2026-6276",
   "verdict": "対象外（大きさ）",
   "scope": null,
   "property_changed": null,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {},
   "detail": "",
   "c_files": [
@@ -465,12 +603,17 @@
   "notes": null
  },
  {
+  "review": null,
+  "review_problems": [],
+  "review_summary": "",
   "release": "trixie",
   "patch": "CVE-2026-6429.patch",
   "cve": "CVE-2026-6429",
   "verdict": "対象外（大きさ）",
   "scope": null,
   "property_changed": null,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {},
   "detail": "",
   "c_files": [
@@ -481,12 +624,17 @@
   "notes": null
  },
  {
+  "review": "指摘なし",
+  "review_problems": [],
+  "review_summary": "この性質で言えるのは、CURLOPT_PROXY を NULL でない別の文字列に付け替えたとき、修正後は proxy の Digest の nonce と選んだ認証方式が消え、修正前は残る、ということです。言えないのは、ヘッダを作る送信側の処理と、NULL を設定する経路・旧値が NULL の経路で、どれも証明の外にあります。消えた状態のもとで実際に Proxy-Authorization が proxyB に送られないことも、この性質からは出てきません。",
   "release": "trixie",
   "patch": "CVE-2026-7168.patch",
   "cve": "CVE-2026-7168",
   "verdict": "同じ性質",
   "scope": "場面を絞った（option が CURLOPT_PROXY で、前と新しいプロキシ文字列がどちらも NULL でない）",
   "property_changed": false,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {
    "U1": 4,
    "U0": 1,
@@ -500,12 +648,17 @@
   "notes": "research/backport-proof-debian/cases/CVE-2026-7168.md"
  },
  {
+  "review": "指摘なし",
+  "review_problems": [],
+  "review_summary": "言えるのは、U1・D1 では may_tls が立っていて TLS 設定が合わない接続は照合関数を通らず、U0・D0 では設定の合わない TLS 接続が STARTTLS 系 scheme の照合を通る入力がある、ということ。言えないのは、ConnectionExists で use_ssl > NONE から may_tls を立てる行と、url_match_conn がこの2関数の論理積で再利用を決めることで、どちらも証明の外にある（P0 の入力が実際の IMAP などのハンドラ表で起きることも定理には入っていない）。",
   "release": "trixie",
   "patch": "CVE-2026-8286.patch",
   "cve": "CVE-2026-8286",
   "verdict": "同じ性質",
   "scope": "すべての入力",
   "property_changed": false,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {
    "U1": 2,
    "U0": 2,
@@ -519,12 +672,19 @@
   "notes": "research/backport-proof-debian/cases/CVE-2026-8286.md"
  },
  {
+  "review": "指摘あり",
+  "review_problems": [
+   "p0_states_bug"
+  ],
+  "review_summary": "P1 で言えるのは、修正後（U1/D1）には Cookie の Domain の末尾の '.' が PSL の検査に渡らなくなることまでです。'co.uk' が実際に拒まれるかは libpsl 次第で、P1 は何も言いません。P0 は libpsl が末尾に '.' の付いた文字列を受け入れると仮定した条件付きの主張で、共通の前提の clen ≤ 256 のままでは clen=256 のとき偽になります（D0 は psl を呼ばずに CERR_PSL を返すため）。P0 は clen ≤ 255 に絞る必要があります。",
   "release": "trixie",
   "patch": "CVE-2026-8924.patch",
   "cve": "CVE-2026-8924",
   "verdict": "同じ性質",
   "scope": "場面を絞った（dlen・clen を2以上にし、P0 では clen を256未満にした）",
   "property_changed": true,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {
    "U1": 8,
    "U0": 8,
@@ -538,12 +698,17 @@
   "notes": "research/backport-proof-debian/cases/CVE-2026-8924.md"
  },
  {
+  "review": "指摘なし",
+  "review_problems": [],
+  "review_summary": "この性質で言えるのは次のことまで: 環境変数から HTTP プロキシを読む場面で、修正後はプロキシが変わると関数を抜けた時点で前の Digest の状態（nonce）が消え、修正前は残る。その後の段で Proxy-Authorization が実際に送られないこと、realm などほかの欄も消えること、Debian 側で CURLOPT_PROXYUSERPWD を使う設定（proxy_user_passwd=1）の場合は述べていない。",
   "release": "trixie",
   "patch": "CVE-2026-8927.patch",
   "cve": "CVE-2026-8927",
   "verdict": "同じ性質",
   "scope": "場面を絞った（環境変数から HTTP プロキシを読む経路、場面 S）",
   "property_changed": false,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
   "external_specs": {
    "U1": 7,
    "U0": 4,

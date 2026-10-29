@@ -9,6 +9,8 @@ For each cases/<patch>.json given on the command line:
   - the D1 / D0 theorems mention the Clight functions in `d_functions`: the name appears
     in the `#check` output, or among the constants of the theorem's type after unfolding
     reducible definitions (`abbrev FD1 := …_d1.f_…`)
+  - a record with `p0_on_fixed` 「成立」 names the theorems in `theorems.P0_on_fixed`
+    (P0 restated on the fixed function, §3.10); they get the same axiom and source checks
 
 A case whose verdict is not 「同じ性質」 may have no theorems; it is reported as
 「確認する定理が無い」. Prints one JSON document to stdout. Exit code 0 when no case
@@ -42,6 +44,10 @@ VERDICTS = (SAME, '証明できず', '上流と仕組みが違う', '対象外�
             '上流の修正を特定できない', 'パッチが当たらない')
 SLOTS = ('U1', 'U0', 'D1', 'D0')
 D_SLOTS = ('D1', 'D0')
+CROSS_SLOT = 'P0_on_fixed'
+THEOREM_KEYS = SLOTS + (CROSS_SLOT,)
+CROSS_HOLDS = '成立'
+CROSS_RESULTS = (CROSS_HOLDS, '示せず')
 ALLOWED_AXIOMS = frozenset({'propext', 'Classical.choice', 'Quot.sound',
                             'CC.externalFunctionsSem', 'CC.inlineAssemblySem'})
 FORBIDDEN_WORDS = re.compile(r'(?<![\w.\'])(sorry|admit|native_decide|bv_decide)(?![\w\'])')
@@ -88,6 +94,7 @@ class Case:
     lean_modules: tuple[str, ...]
     theorems: dict[str, tuple[str, ...]]
     d_functions: dict[str, tuple[str, ...]]
+    p0_on_fixed: str | None = None
 
 
 @dataclass
@@ -136,15 +143,19 @@ def load_case(path: Path) -> Case:
             raise ValueError(f'{key}: a string is required')
     if data['verdict'] not in VERDICTS:
         raise ValueError(f'verdict: {data["verdict"]!r} is not one of §3.6')
+    cross = data.get('p0_on_fixed')
+    if cross is not None and cross not in CROSS_RESULTS:
+        raise ValueError(f'p0_on_fixed: {cross!r} is not one of {CROSS_RESULTS}')
     return Case(
         path=str(path), patch=data['patch'], verdict=data['verdict'],
         lean_modules=_names(data.get('lean_modules', []), 'lean_modules'),
-        theorems=_slot_map(data.get('theorems', {}), SLOTS, 'theorems'),
-        d_functions=_slot_map(data.get('d_functions', {}), D_SLOTS, 'd_functions'))
+        theorems=_slot_map(data.get('theorems', {}), THEOREM_KEYS, 'theorems'),
+        d_functions=_slot_map(data.get('d_functions', {}), D_SLOTS, 'd_functions'),
+        p0_on_fixed=cross)
 
 
 def all_theorems(case: Case) -> list[str]:
-    return [t for slot in SLOTS for t in case.theorems.get(slot, ())]
+    return [t for slot in THEOREM_KEYS for t in case.theorems.get(slot, ())]
 
 
 def d_theorems(case: Case) -> list[str]:
@@ -345,6 +356,8 @@ def judge(case: Case, built: bool, probe: ProbeOutput, lean_dir: Path) -> CaseRe
         res.reasons.extend(f'd_functions.{s} が空' for s in D_SLOTS if not case.d_functions.get(s))
     if not case.lean_modules:
         res.reasons.append('lean_modules が空')
+    if case.p0_on_fixed == CROSS_HOLDS and not case.theorems.get(CROSS_SLOT):
+        res.reasons.append(f'p0_on_fixed が「{CROSS_HOLDS}」で、theorems.{CROSS_SLOT} が空')
     check_axioms(case, probe, res)
     check_d_functions(case, probe, res)
     check_sources(case, lean_dir, res)

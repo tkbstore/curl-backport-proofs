@@ -10,7 +10,8 @@ with manifest.json). For an open case it:
   3. runs check.py on the case record the job wrote, and decides the verdict:
      「同じ性質」 only if the job wrote that verdict, stopped within the limits and
      check.py passed it; otherwise 「証明できず」 with the reason
-  4. writes prove.json next to the case record, commits it, and copies it to the
+  4. has a second agent read the stated properties (review.py, §3.9)
+  5. writes prove.json next to the case record, commits it, and copies it to the
      case directory
 
 The worktree and branch are left for the publishing step (§5). Nothing here needs a
@@ -31,6 +32,8 @@ import sys
 import time
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
+
+import review
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[2]
@@ -72,6 +75,7 @@ class Outcome:
     worktree: str = ''
     git_branch: str = ''
     check: dict | None = None
+    review: dict | None = None  # §3.9; recorded next to the verdict, never changes it
 
 
 def names_for(manifest: dict, repo: Path) -> Names:
@@ -175,11 +179,15 @@ def decide(out: Outcome, record: dict | None, check: dict | None, limit: int) ->
     out.verdict = NOT_PROVED if out.reasons else SAME
 
 
+def public_text(out: Outcome, worktree: Path) -> str:
+    """The record is published: paths inside the worktree become relative, and the
+    worktree itself is named without the machine's home directory."""
+    text = json.dumps(asdict(out), ensure_ascii=False, indent=1) + '\n'
+    return text.replace(str(worktree) + '/', '').replace(str(worktree), worktree.name)
+
+
 def finish(case_dir: Path, n: Names, out: Outcome) -> None:
-    # The record is published: paths inside the worktree become relative, and the
-    # worktree itself is named without the machine's home directory.
-    text = (json.dumps(asdict(out), ensure_ascii=False, indent=1) + '\n').replace(
-        str(n.worktree) + '/', '').replace(str(n.worktree), n.worktree.name)
+    text = public_text(out, n.worktree)
     rel = str(Path(n.case_json).with_suffix('.prove.json'))
     (n.worktree / rel).write_text(text)
     (case_dir / 'prove.json').write_text(text)
@@ -203,6 +211,9 @@ def prove(case_dir: Path, hours: float, builds: int, cmd: list[str], repo: Path)
     record = json.loads(path.read_text()) if path.exists() else None
     out.check = run_check(n.worktree, path) if record is not None else None
     decide(out, record, out.check, builds)
+    notes = n.worktree / n.case_md
+    if notes.exists():
+        out.review = review.review(notes, n.worktree / n.input_dir, manifest, cwd=n.worktree)
     finish(case_dir, n, out)
     return out
 

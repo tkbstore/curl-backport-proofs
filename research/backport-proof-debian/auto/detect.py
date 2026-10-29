@@ -22,6 +22,7 @@ RAW = 'https://salsa.debian.org/debian/curl/-/raw'
 CURL_CVE_JSON = 'https://curl.se/docs/{cve}.json'
 MAX_LINES = 40
 PATCH_RE = re.compile(r'^(CVE-\d{4}-\d+)(?:_\d+)?\.patch$')
+HUNK_RE = re.compile(r'^@@ -\d+(?:,(\d+))? \+\d+(?:,(\d+))? @@')
 
 
 @dataclass(frozen=True)
@@ -65,15 +66,26 @@ def c_changes(patch: str) -> tuple[tuple[str, ...], int]:
     files: list[str] = []
     lines = 0
     current = None
+    old_left = new_left = 0  # lines still inside the current hunk, by its @@ header
     for line in patch.splitlines():
+        if old_left > 0 or new_left > 0:
+            if line.startswith('-'):
+                old_left -= 1
+                lines += current is not None
+            elif line.startswith('+'):
+                new_left -= 1
+                lines += current is not None
+            elif not line.startswith('\\'):  # context; "\ No newline" is not a line
+                old_left, new_left = old_left - 1, new_left - 1
+            continue
         if line.startswith('+++ '):
             path = strip_prefix(line[4:].split('\t')[0])
             is_c = path.endswith('.c') and not path.startswith(('tests/', 'docs/'))
             current = path if is_c else None
             if current and current not in files:
                 files.append(current)
-        elif current and line[:1] in '+-' and not line.startswith(('+++', '---')):
-            lines += 1
+        elif m := HUNK_RE.match(line):
+            old_left, new_left = int(m.group(1) or 1), int(m.group(2) or 1)
     return tuple(files), lines
 
 

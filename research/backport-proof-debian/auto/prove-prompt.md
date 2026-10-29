@@ -29,8 +29,11 @@
 2. `$case_md` に、対象の関数・構成・P1/P0 の文（日本語と Lean の定理の形）・仮定する外部仕様を書き、**証明の前にコミット**する。
    述べられる性質が無いと判断したら、判定「証明できず」と理由を書いて終える
 3. `$input_dir/` の C から翻訳単位を作る（関数の本体は原文から機械で切り出す。前置きの構造体の削減とマクロの展開は書いてよい）。
-   clightgen: `~/Documents/GitHub/_vendor/certora-clean/clightgen -lean -normalize <file.c>`（出力を `lean/` に `Gen${prefix}*.lean` として移す）
+   clightgen: `../../_vendor/certora-clean/clightgen -lean -normalize <file.c>`（この worktree の根からの相対。`lakefile.toml` の require と同じ `_vendor`。出力を `lean/` に `Gen${prefix}*.lean` として移す）
 4. U1・U0 を証明し、D1・D0 に写す
+4a. P0 を修正後の関数（U1、D1）で述べ直して証明を試す（PROTOCOL-auto §3.10。実例 `research/c-semantics-link/lean/Deb2025_14819Cross.lean`）。
+   成り立ったら P0 が修正の前後を見分けていないので、上限の内なら P0 を見分ける形に直してよい（性質の変更「あり」）。
+   直せずに終えるなら、成り立った定理を記録に残す
 5. 確認: `python3 research/backport-proof-debian/auto/check.py $case_json` が「合格」になること
 6. `$case_md` の「結果」節に、成否（U1/U0/D1/D0）・時間（開始と終了の時刻、`date` の出力）・build の回数・外部仕様の数・
    U から D へ書き換えた行数・性質の変更の有無と理由を書く。`$case_json` を PROTOCOL-auto §3.7 の形で書く

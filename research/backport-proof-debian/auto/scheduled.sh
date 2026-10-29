@@ -2,7 +2,7 @@
 # PROTOCOL-auto.md §5 の定期実行。CI は使わない。
 #   scheduled.sh install <公開リポジトリの clone>   launchd に毎日 03:00 の実行を登録する
 #   scheduled.sh                                   1回まわす（launchd から呼ばれる）
-# このスクリプトがある checkout（パイプライン専用の worktree、auto/pipeline）で run.py を動かす。
+# このスクリプトがある checkout（パイプライン専用の clone、auto/pipeline）で run.py を動かす。置き場所は ~/Documents の外（PROTOCOL-auto §5）。
 #   CBP_PUBLIC      公開リポジトリの clone（必須。install が plist に書く）
 #   CBP_WORK        作業ディレクトリ（既定 ~/.local/share/curl-backport-proofs）
 #   CBP_MAX_PROOFS  1回で証明する件数の上限（既定 1）
@@ -44,6 +44,8 @@ log="$work/logs/$(date '+%Y-%m-%dT%H%M%S').log"
 {
   date '+start %F %T'
   git -C "$public" pull -q --ff-only origin main
+  # コードの更新は GitHub の auto/pipeline から受け取る（~/Documents は launchd から読めない: TCC）
+  git -C "$here" pull -q --no-edit origin auto/pipeline || echo "pull of auto/pipeline failed; running the checked-out code"
   python3 "$here/run.py" --public "$public" --work "$work" --max-proofs "${CBP_MAX_PROOFS:-1}"
   echo "exit $?"
   date '+end %F %T'

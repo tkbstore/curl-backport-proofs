@@ -32,6 +32,7 @@ P0 on fixed = P0, restated on the fixed function, proved in Lean (PROTOCOL-auto.
 | bookworm | `CVE-2025-14819.patch` | 同じ性質 | すべての入力 | U1 2 / U0 1 / D1 2 / D0 1 | 指摘あり (p0_states_bug) | — | [CVE-2025-14819.md](research/backport-proof-debian/cases/bookworm/CVE-2025-14819.md) |
 | bookworm | `CVE-2026-5773.patch` | 上流と仕組みが違う | — | — | — | — | up_in_deb 0.00 < 0.5; `lib/smb.c` 6 lines |
 | trixie | `CVE-2025-10148.patch` | 同じ性質 | 場面を絞った（payload_len が負でない、payload_remain が正でない、を前提に置いた） | U1 6 / U0 5 / D1 6 / D0 5 | 指摘なし | — | [CVE-2025-10148.md](research/backport-proof-debian/cases/CVE-2025-10148.md) |
+| trixie | `CVE-2025-13034.patch` | 同じ性質 | すべての入力 | U1 2 / U0 2 / D1 2 / D0 2 | 指摘なし | 示せず | [CVE-2025-13034.md](research/backport-proof-debian/cases/trixie/CVE-2025-13034.md) |
 | trixie | `CVE-2025-14524.patch` | 同じ性質 | 場面を絞った（Curl_sasl_start だけ。Debian が直した Curl_sasl_continue は証明していない。P0 に sasl_ir=1 などの前提を足した） | U1 3 / U0 5 / D1 3 / D0 4 | 指摘なし | — | [CVE-2025-14524.md](research/backport-proof-debian/cases/CVE-2025-14524.md) |
 | trixie | `CVE-2025-14819.patch` | 同じ性質 | すべての入力 | U1 2 / U0 1 / D1 2 / D0 1 | 指摘なし | 成立 (`Deb2025_14819X.P0_on_after`, `Deb2025_14819X.P0_on_debian_after`) | [CVE-2025-14819.md](research/backport-proof-debian/cases/CVE-2025-14819.md) |
 | trixie | `CVE-2026-1965_1.patch` | 対象外（大きさ） | — | — | — | — | `lib/url.c` 87 lines |

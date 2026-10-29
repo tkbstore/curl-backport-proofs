@@ -1,0 +1,54 @@
+{
+ "patch": "CVE-2025-13034.patch",
+ "cve": "CVE-2025-13034",
+ "branch": "debian/trixie",
+ "debian_commit": "c2a97b9ea54e3ad6c4381c87a0ef235af2917863",
+ "verdict": null,
+ "detail": "",
+ "debian_version": "8.14.1-2+deb13u6",
+ "base_tag": "curl-8_14_1",
+ "upstream_fixed": "3d91ca8cdb3b434226e743946d428b4dd3acf2c9",
+ "upstream_parent": "dc34498d18d3303d67364423b4aa0daab4afb3ba",
+ "debian_patch_sha256": "6d3caaf6f401513058902f6ffcc011d0fe173ac61aca0cfe32bacbc9269b1e27",
+ "target_file": "lib/vquic/vquic-tls.c",
+ "series_applied": [
+  {
+   "patch": "CVE-2025-13034.patch",
+   "sha256": "6d3caaf6f401513058902f6ffcc011d0fe173ac61aca0cfe32bacbc9269b1e27"
+  }
+ ],
+ "files": {
+  "U0": {
+   "lib/vquic/vquic-tls.c": "fb16aaba132f7cd940ff0458448ee5c0415766287b786f0f0e5c292ad0bff5f0"
+  },
+  "U1": {
+   "lib/vquic/vquic-tls.c": "d026b7adb7f0efce1a63d276d18837f66f901fdc314cba182dfea531b15abcaa"
+  },
+  "D0": {
+   "lib/vquic/vquic-tls.c": "f0ccf754c9fb482233ccf3d02153e25c3db3d4b785b151411d66e8946878581d"
+  },
+  "D1": {
+   "lib/vquic/vquic-tls.c": "cb6ff2f110a8793bd4ca405c73336ba93d1065c76b4ebf894aec878c7a540f5b"
+  }
+ },
+ "functions": {
+  "U": [
+   {
+    "name": "Curl_vquic_tls_verify_peer",
+    "before": true,
+    "after": true
+   }
+  ],
+  "D": [
+   {
+    "name": "Curl_vquic_tls_verify_peer",
+    "before": true,
+    "after": true
+   }
+  ]
+ },
+ "changes_outside_functions": {
+  "U": 0,
+  "D": 0
+ }
+}

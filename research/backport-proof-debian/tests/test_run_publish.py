@@ -145,3 +145,61 @@ def test_p0_on_fixed_cell_names_the_theorem() -> None:
     assert publish.p0_on_fixed({}) == '—'
     rec = {'p0_on_fixed': '成立', 'p0_on_fixed_theorems': ['A.b']}
     assert publish.p0_on_fixed(rec) == '成立 (`A.b`)'
+
+
+def _committed_repo(git_repo: Path) -> Path:
+    (git_repo / 'a.txt').write_text('a\n')
+    run_git(git_repo, 'add', 'a.txt')
+    run_git(git_repo, 'commit', '-q', '-m', 'init')
+    return git_repo
+
+
+def test_a_lock_of_a_dead_pass_is_replaced(tmp_path: Path) -> None:
+    lock, log = tmp_path / 'run.lock', []
+    lock.write_text('999999')  # no such process
+    assert run.take_lock(lock, log)
+    assert lock.read_text() == str(__import__('os').getpid())
+    assert log and 'replaced' in log[0]
+
+
+def test_a_lock_of_a_live_pass_is_kept(tmp_path: Path) -> None:
+    lock = tmp_path / 'run.lock'
+    lock.write_text(str(__import__('os').getpid()))
+    assert not run.take_lock(lock, [])
+
+
+def test_uncommitted_changes_are_stashed_not_lost(monkeypatch: pytest.MonkeyPatch, git_repo: Path,
+                                                  tmp_path: Path) -> None:
+    repo = _committed_repo(git_repo)
+    monkeypatch.setattr(run, 'REPO', repo)
+    (repo / 'a.txt').write_text('changed\n')
+    log: list[str] = []
+    run.recover(tmp_path / 'work', log)
+    assert run_git(repo, 'status', '--porcelain') == ''
+    assert 'leftover' in run_git(repo, 'stash', 'list')
+    assert 'stashed' in log[0]
+
+
+def test_a_leftover_proof_worktree_is_moved_and_its_name_freed(monkeypatch: pytest.MonkeyPatch,
+                                                               git_repo: Path, tmp_path: Path) -> None:
+    repo = _committed_repo(git_repo)
+    monkeypatch.setattr(run, 'REPO', repo)
+    wt = tmp_path / 'repo-prove-trixie-CVE-1'
+    run_git(repo, 'worktree', 'add', '-q', '-b', 'prove/trixie-CVE-1', str(wt), 'HEAD')
+    (wt / 'half-done.lean').write_text('-- work of the interrupted job\n')
+    log: list[str] = []
+    run.recover(tmp_path / 'work', log)
+    assert not wt.exists()
+    moved = list((tmp_path / 'work' / 'leftover').iterdir())
+    assert len(moved) == 1 and (moved[0] / 'half-done.lean').exists()
+    branches = run_git(repo, 'branch', '--list')
+    assert 'prove/trixie-CVE-1' not in branches and 'leftover/trixie-CVE-1-' in branches
+    assert run.prove_worktrees() == []
+
+
+def test_a_clean_checkout_is_left_alone(monkeypatch: pytest.MonkeyPatch, git_repo: Path, tmp_path: Path) -> None:
+    repo = _committed_repo(git_repo)
+    monkeypatch.setattr(run, 'REPO', repo)
+    log: list[str] = []
+    run.recover(tmp_path / 'work', log)
+    assert log == [] and run_git(repo, 'stash', 'list') == ''

@@ -322,6 +322,30 @@
  {
   "review": "指摘なし",
   "review_problems": [],
+  "review_summary": "この性質で言えるのは、QUIC＋GnuTLS の Curl_vquic_tls_verify_peer について、修正前（U0・D0）は verifyhost を切ると Curl_gtls_verifyserver を呼ばずに CURLE_OK を返し、ピンの合わない証明書を受け入れることと、修正後（U1・D1）は verifyhost に関係なくその戻り値を返し、検査に通らない証明書を受け入れないことです。言えないのは、Curl_gtls_verifyserver（gtls.c）がピンを正しく照合すること（horacle として仮定しただけ）と、OpenSSL・wolfSSL の構成の振る舞いです。",
+  "release": "trixie",
+  "patch": "CVE-2025-13034.patch",
+  "cve": "CVE-2025-13034",
+  "verdict": "同じ性質",
+  "scope": "すべての入力",
+  "property_changed": false,
+  "p0_on_fixed": "示せず",
+  "p0_on_fixed_theorems": [],
+  "external_specs": {
+   "U1": 2,
+   "U0": 2,
+   "D1": 2,
+   "D0": 2
+  },
+  "detail": "",
+  "c_files": null,
+  "changed_lines": null,
+  "record": "research/backport-proof-debian/cases/trixie/CVE-2025-13034.json",
+  "notes": "research/backport-proof-debian/cases/trixie/CVE-2025-13034.md"
+ },
+ {
+  "review": "指摘なし",
+  "review_problems": [],
   "review_summary": "リダイレクト後に許可が無く、サーバーが OAuth の方式だけを示す場合について、修正後の Curl_sasl_start が OAUTHBEARER・XOAUTH2 のメッセージを作らず送信もしないこと、修正前は Bearer を引数にして作ることが言える。一方、OAuth と PLAIN・LOGIN・EXTERNAL を一緒に示された場合と、Debian が独自に条件を足した Curl_sasl_continue については、この性質では何も言えない。",
   "release": "trixie",
   "patch": "CVE-2025-14524.patch",

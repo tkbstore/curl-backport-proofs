@@ -141,6 +141,9 @@ P0 が修正後の関数でも成り立つなら、P0 は修正の前と後を�
   `~/.local/share/curl-backport-proofs/src/atrium-lean4`、公開リポジトリの clone を `…/src/curl-backport-proofs`、CompCert/clean を `…/_vendor/certora-clean` に置く
   （`lakefile.toml` の require が5つ上の `_vendor` を指すため）。コードは毎回 GitHub の `auto/pipeline` から pull する。
   スリープ中に過ぎた 03:00 は次に起きたときに1回だけ走り、電源が切れていた日は飛ぶ。未判定の件は次の回に残る
+- 途中で止まった回の残り: 次の回の `run.py` が最初に片付け、どれも消さずに残す。プロセスの無い `run.lock` は置き換える、
+  commit されていない変更は `git stash`、証明の worktree は `<作業ディレクトリ>/leftover/` に移してブランチを `leftover/…` に改名する。
+  ログに `recover:` の行が出る
 
 ## 6. この仕組みの限界
 

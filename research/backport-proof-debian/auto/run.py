@@ -10,6 +10,11 @@ by --max-proofs is found again next time. Finally publish.py pushes the copy, th
 and the verdict index. Run it from a checkout that nobody else works in (it commits and
 merges on the checked-out branch). A lock file keeps two passes from overlapping.
 
+A pass that was cut off (power off, killed) must not stop every later pass, so a new pass
+first clears what it left (`recover`), keeping all of it: a lock whose process is gone is
+replaced, uncommitted changes go to `git stash`, and a leftover proof worktree is moved to
+<work>/leftover/ with its branch renamed leftover/…, which frees the names prove.py needs.
+
 Usage:
     python3 run.py --public <clone> --work <dir> [--branch debian/trixie ...]
                    [--max-proofs 1] [--no-push]
@@ -20,6 +25,7 @@ import os
 import shutil
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -125,6 +131,59 @@ def run_branch(branch: str, public: Path, work: Path, budget: int, log: list[str
     return budget
 
 
+def pid_alive(pid: int) -> bool:
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+    return True
+
+
+def take_lock(lock: Path, log: list[str]) -> bool:
+    """Create the lock; replace it when the pass that wrote it is no longer running."""
+    for _ in range(2):
+        try:
+            fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+        except FileExistsError:
+            text = lock.read_text().strip()
+            if text.isdigit() and pid_alive(int(text)):
+                return False
+            log.append(f'recover: {lock.name} of pid {text or "?"} was left by a pass that is gone; replaced')
+            lock.unlink(missing_ok=True)
+            continue
+        os.write(fd, str(os.getpid()).encode())
+        os.close(fd)
+        return True
+    return False
+
+
+def prove_worktrees() -> list[tuple[Path, str]]:
+    """(path, branch) of every worktree on a prove/ branch; a finished proof removes its own."""
+    out, path = [], None
+    for line in git('worktree', 'list', '--porcelain').splitlines():
+        if line.startswith('worktree '):
+            path = Path(line.removeprefix('worktree '))
+        elif line.startswith('branch refs/heads/prove/') and path is not None:
+            out.append((path, line.removeprefix('branch refs/heads/')))
+    return out
+
+
+def recover(work: Path, log: list[str]) -> None:
+    stamp = time.strftime('%Y%m%dT%H%M%S')
+    if git('status', '--porcelain', '--untracked-files=no').strip():
+        git('stash', 'push', '-m', f'leftover {stamp}: uncommitted changes of an interrupted pass')
+        log.append(f'recover: uncommitted changes stashed (leftover {stamp})')
+    for path, branch in prove_worktrees():
+        name = branch.removeprefix('prove/')
+        dest = work / 'leftover' / f'{name}-{stamp}'
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        git('worktree', 'move', str(path), str(dest))
+        git('branch', '-m', branch, f'leftover/{name}-{stamp}')
+        log.append(f'recover: worktree of {branch} moved to {dest}')
+
+
 def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     ap.add_argument('--public', type=Path, required=True)
@@ -133,20 +192,14 @@ def main(argv: list[str]) -> int:
     ap.add_argument('--max-proofs', type=int, default=1)
     ap.add_argument('--no-push', action='store_true')
     args = ap.parse_args(argv)
-    if git('status', '--porcelain', '--untracked-files=no').strip():
-        print('the checkout has uncommitted changes; not running', file=sys.stderr)
-        return 2
     args.work.mkdir(parents=True, exist_ok=True)
     lock = args.work / 'run.lock'
-    try:
-        fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
-    except FileExistsError:
+    log: list[str] = []
+    if not take_lock(lock, log):
         print(f'{lock} exists: another pass is running', file=sys.stderr)
         return 2
-    os.write(fd, str(os.getpid()).encode())
-    os.close(fd)
-    log: list[str] = []
     try:
+        recover(args.work.resolve(), log)
         shutil.rmtree(args.work / 'state', ignore_errors=True)
         budget = args.max_proofs
         for branch in args.branch or BRANCHES:

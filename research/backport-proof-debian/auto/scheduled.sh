@@ -45,8 +45,11 @@ log="$work/logs/$(date '+%Y-%m-%dT%H%M%S').log"
   date '+start %F %T'
   git -C "$public" pull -q --ff-only origin main
   # コードの更新は GitHub の auto/pipeline から受け取る（~/Documents は launchd から読めない: TCC）
-  git -C "$here" pull -q --no-edit origin auto/pipeline || echo "pull of auto/pipeline failed; running the checked-out code"
-  python3 "$here/run.py" --public "$public" --work "$work" --max-proofs "${CBP_MAX_PROOFS:-1}"
+  # ローカルの auto/pipeline には証明のマージが積まれていて origin と枝分かれする。--no-rebase が無いと git は pull を拒む
+  git -C "$here" pull -q --no-rebase --no-edit origin auto/pipeline || echo "pull of auto/pipeline failed; running the checked-out code"
+  # 実行中はスリープさせない。眠ると API の接続が切れて証明のジョブが落ちる（2026-10-31 の CVE-2023-27533）。
+  # -i はアイドルによるスリープ、-s は電源につないでいる間のシステムのスリープを止める。蓋を閉じた電池駆動は止められない
+  caffeinate -i -s python3 "$here/run.py" --public "$public" --work "$work" --max-proofs "${CBP_MAX_PROOFS:-1}"
   echo "exit $?"
   date '+end %F %T'
 } >> "$log" 2>&1

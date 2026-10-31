@@ -151,6 +151,19 @@ def run_claude(cmd: list[str], prompt: str, wt: Path, builds: int, hours: float,
             return proc.returncode, True
 
 
+def last_result(log: Path) -> str:
+    """The `result` of the last JSON line `claude -p --output-format json` wrote, e.g. why it stopped."""
+    if not log.exists():
+        return ''
+    for line in reversed(log.read_text(errors='replace').splitlines()):
+        if line.startswith('{'):
+            try:
+                return str(json.loads(line).get('result', ''))[:500]
+            except json.JSONDecodeError:
+                continue
+    return ''
+
+
 def run_check(wt: Path, case_json: Path) -> dict:
     proc = subprocess.run([sys.executable, str(wt / 'research/backport-proof-debian/auto/check.py'),
                            str(case_json), '--lean-dir', str(wt / 'research/c-semantics-link/lean')],
@@ -165,6 +178,8 @@ def decide(out: Outcome, record: dict | None, check: dict | None, limit: int) ->
     """§3.6: 「同じ性質」 needs the job's own verdict, the limits, and §4."""
     if out.timed_out:
         out.reasons.append('時間の上限に達して止めた')
+    elif out.claude_exit not in (0, None):
+        out.reasons.append(f'ジョブが異常終了した（exit {out.claude_exit}）')
     if out.builds > limit:
         out.reasons.append(f'build の回数 {out.builds} が上限 {limit} を超えた')
     if record is None:
@@ -211,6 +226,8 @@ def prove(case_dir: Path, hours: float, builds: int, cmd: list[str], repo: Path)
     record = json.loads(path.read_text()) if path.exists() else None
     out.check = run_check(n.worktree, path) if record is not None else None
     decide(out, record, out.check, builds)
+    if out.claude_exit not in (0, None) and not out.timed_out:
+        out.reasons.append(f'ジョブの最後の出力: {last_result(case_dir / "claude.log")}')
     notes = n.worktree / n.case_md
     if notes.exists():
         out.review = review.review(notes, n.worktree / n.input_dir, manifest, cwd=n.worktree)

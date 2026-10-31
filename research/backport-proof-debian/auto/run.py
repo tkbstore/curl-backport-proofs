@@ -33,6 +33,7 @@ REPO = HERE.parents[2]
 CASES = 'research/backport-proof-debian/cases'
 BRANCHES = ('debian/trixie', 'debian/bookworm')
 CO_AUTHOR = 'Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>'
+MAX_INTERRUPTS = 3
 
 
 def git(*args: str) -> str:
@@ -83,6 +84,45 @@ def write_record(f: dict) -> str:
     return rel
 
 
+def interrupted(rec: dict) -> bool:
+    """A proof job that stopped by itself before its time limit (the API connection was lost while
+    the Mac slept, a crash): its 「証明できず」 says nothing about the patch, so it is not a verdict."""
+    return rec.get('claude_exit') not in (0, None) and not rec.get('timed_out')
+
+
+def retries_left(work: Path, name: str) -> bool:
+    """An interrupted job is retried by the next pass; the third interruption is kept as the verdict."""
+    shelved = work / 'leftover'
+    return not shelved.exists() or sum(
+        1 for p in shelved.iterdir() if p.name.rsplit('-', 1)[0] == name) < MAX_INTERRUPTS - 1
+
+
+def retry_interrupted(branch: str, patches: dict, work: Path, log: list[str]) -> dict:
+    """Drop from the state the patches whose published verdict came from an interrupted job,
+    unless that job was already the last try (`retries_left`)."""
+    release = branch.split('/')[-1]
+    kept = {}
+    for patch, sha in patches.items():
+        stem = patch.removesuffix('.patch')
+        path = REPO / CASES / release / (stem + '.prove.json')
+        if (path.exists() and interrupted(json.loads(path.read_text()))
+                and retries_left(work, f'{release}-{stem}')):
+            log.append(f'{patch}: the published verdict came from an interrupted job; proved again')
+            continue
+        kept[patch] = sha
+    return kept
+
+
+def shelve(path: Path, branch: str, work: Path, log: list[str]) -> None:
+    """Move a proof worktree to <work>/leftover/ and rename its branch, keeping all of it."""
+    name = branch.removeprefix('prove/')
+    dest = work / 'leftover' / f'{name}-{time.strftime("%Y%m%dT%H%M%S")}'
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    git('worktree', 'move', str(path), str(dest))
+    git('branch', '-m', branch, f'leftover/{dest.name}')
+    log.append(f'worktree of {branch} moved to {dest}')
+
+
 def prove_one(f: dict, out: Path, log: list[str]) -> bool:
     """build.py and prove.py for one open finding; True when it reached a verdict."""
     built = tool('build.py', str(out), stdin=json.dumps(f) + '\n')
@@ -98,6 +138,11 @@ def prove_one(f: dict, out: Path, log: list[str]) -> bool:
     if not res:
         log.append(f"{f['patch']}: prove.py gave no result")
         return False
+    name = res[0]['git_branch'].removeprefix('prove/')
+    if interrupted(res[0]) and retries_left(out.parent, name):
+        log.append(f"{f['patch']}: the job was interrupted (exit {res[0]['claude_exit']}); retried next pass")
+        shelve(Path(res[0]['worktree']), res[0]['git_branch'], out.parent, log)
+        return False
     git('merge', '--no-ff', '--no-edit', res[0]['git_branch'])
     git('worktree', 'remove', '--force', res[0]['worktree'])
     git('branch', '-d', res[0]['git_branch'])
@@ -108,6 +153,7 @@ def prove_one(f: dict, out: Path, log: list[str]) -> bool:
 def run_branch(branch: str, public: Path, work: Path, budget: int, log: list[str]) -> int:
     src = state_file(public, branch)
     state = json.loads(src.read_text()) if src.exists() else {'commit': None, 'patches': {}}
+    state = {**state, 'patches': retry_interrupted(branch, state['patches'], work, log)}
     tmp = work / 'detect-state.json'
     tmp.write_text(json.dumps(state))
     found = tool('detect.py', branch, str(tmp), '--dry-run')
@@ -176,12 +222,34 @@ def recover(work: Path, log: list[str]) -> None:
         git('stash', 'push', '-m', f'leftover {stamp}: uncommitted changes of an interrupted pass')
         log.append(f'recover: uncommitted changes stashed (leftover {stamp})')
     for path, branch in prove_worktrees():
-        name = branch.removeprefix('prove/')
-        dest = work / 'leftover' / f'{name}-{stamp}'
-        dest.parent.mkdir(parents=True, exist_ok=True)
-        git('worktree', 'move', str(path), str(dest))
-        git('branch', '-m', branch, f'leftover/{name}-{stamp}')
-        log.append(f'recover: worktree of {branch} moved to {dest}')
+        shelve(path, branch, work, log)
+        log[-1] = f'recover: {log[-1]}'
+
+
+def last_run(started: str, finished: str, log: list[str], error: BaseException | None) -> dict:
+    """state/last-run.json: what a reader outside this machine needs to tell a pass that failed
+    from one that had nothing to do. The file is public, so the home directory is not shown."""
+    home = str(Path.home())
+    err = None if error is None else f'{type(error).__name__}: {error}'[-1500:]
+    return {'started': started, 'finished': finished, 'ok': error is None,
+            'error': err and err.replace(home, '~'), 'log': [line.replace(home, '~') for line in log]}
+
+
+def report_failure(public: Path, rec: dict, push: bool) -> None:
+    """Commit only the report: a pass that failed inside publish may have left the clone half-written."""
+    rel = 'state/last-run.json'
+    (public / 'state').mkdir(exist_ok=True)
+    (public / rel).write_text(json.dumps(rec, ensure_ascii=False, indent=1) + '\n')
+    for args in (['add', '--', rel], ['commit', '-q', '-m', f'state: the last pass failed\n\n{CO_AUTHOR}', '--', rel]):
+        subprocess.run(['git', '-C', str(public), *args], check=True, capture_output=True)
+    if push:
+        branch = subprocess.run(['git', '-C', str(public), 'symbolic-ref', '--short', 'HEAD'], check=True,
+                                capture_output=True, text=True).stdout.strip()
+        subprocess.run(['git', '-C', str(public), 'push', '-q', 'origin', branch], check=True, capture_output=True)
+
+
+def stamp() -> str:
+    return time.strftime('%Y-%m-%dT%H:%M:%S%z')
 
 
 def main(argv: list[str]) -> int:
@@ -198,17 +266,27 @@ def main(argv: list[str]) -> int:
     if not take_lock(lock, log):
         print(f'{lock} exists: another pass is running', file=sys.stderr)
         return 2
+    started = stamp()
     try:
         recover(args.work.resolve(), log)
         shutil.rmtree(args.work / 'state', ignore_errors=True)
         budget = args.max_proofs
         for branch in args.branch or BRANCHES:
             budget = run_branch(branch, args.public.resolve(), args.work.resolve(), budget, log)
+        # finished is the time publish starts: the report travels in the same commit
+        (args.work / 'state' / 'last-run.json').write_text(
+            json.dumps(last_run(started, stamp(), log, None), ensure_ascii=False, indent=1) + '\n')
         pub = [sys.executable, str(HERE.parent / 'publish' / 'publish.py'), str(args.public),
                '--state', str(args.work / 'state'), '--repo', str(REPO)]
         out = subprocess.run(pub + (['--no-push'] if args.no_push else []),
                              capture_output=True, text=True, check=True).stdout.strip()
         log.append(f'publish: {out}')
+    except Exception as e:
+        if isinstance(e, subprocess.CalledProcessError):
+            e = RuntimeError(f'{e} {(e.stderr or "").strip()[-1000:]}')
+        print('\n'.join(log))
+        report_failure(args.public.resolve(), last_run(started, stamp(), log, e), not args.no_push)
+        raise
     finally:
         lock.unlink()
     print('\n'.join(log))

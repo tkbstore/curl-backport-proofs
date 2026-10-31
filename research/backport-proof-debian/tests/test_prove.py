@@ -134,3 +134,15 @@ def test_a_job_that_ends_in_time_is_not_timed_out(tmp_path: Path) -> None:
                                        'prompt', tmp_path, 7, 1, tmp_path / 'log')
     assert (code, timed_out) == (0, False)
     assert (tmp_path / 'log').read_text().strip() == '7'      # the limit reaches build.sh
+
+
+def test_a_job_that_ended_abnormally_is_not_same(tmp_path: Path) -> None:
+    out = decided(outcome(claude_exit=1), SAME, PASS)
+    assert out.verdict == prove.NOT_PROVED and any('異常終了' in r for r in out.reasons)
+
+
+def test_the_jobs_last_message_names_why_it_ended(tmp_path: Path) -> None:
+    log = tmp_path / 'claude.log'
+    log.write_text('noise\n{"type":"result","is_error":true,"result":"API Error: Connection lost while your computer was asleep"}\n')
+    assert prove.last_result(log) == 'API Error: Connection lost while your computer was asleep'
+    assert prove.last_result(tmp_path / 'none.log') == ''

@@ -203,3 +203,60 @@ def test_a_clean_checkout_is_left_alone(monkeypatch: pytest.MonkeyPatch, git_rep
     log: list[str] = []
     run.recover(tmp_path / 'work', log)
     assert log == [] and run_git(repo, 'stash', 'list') == ''
+
+
+def test_last_run_hides_the_home_directory(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    monkeypatch.setattr(run.Path, 'home', lambda: tmp_path)
+    rec = run.last_run('s', 'f', [f'{tmp_path}/work: built'], RuntimeError(f'git: {tmp_path}/x failed'))
+    assert rec['ok'] is False and rec['started'] == 's' and rec['finished'] == 'f'
+    assert str(tmp_path) not in json.dumps(rec) and rec['log'] == ['~/work: built']
+    assert rec['error'].startswith('RuntimeError: git: ~/x')
+
+
+def test_a_successful_pass_records_no_error() -> None:
+    rec = run.last_run('s', 'f', ['publish: abc'], None)
+    assert rec['ok'] is True and rec['error'] is None
+
+
+def test_a_failed_pass_commits_only_its_report(git_repo: Path) -> None:
+    public = _committed_repo(git_repo)
+    (public / 'a.txt').write_text('half-written by an interrupted publish\n')
+    run.report_failure(public, {'ok': False, 'error': 'boom'}, push=False)
+    shown = run_git(public, 'show', '--name-only', '--format=%s', 'HEAD')
+    assert shown.split()[-1] == 'state/last-run.json' and 'a.txt' not in shown
+    assert json.loads((public / 'state' / 'last-run.json').read_text())['error'] == 'boom'
+    assert 'a.txt' in run_git(public, 'status', '--porcelain')  # left as it was, not committed
+
+
+@pytest.mark.parametrize('rec,expected', [
+    ({'claude_exit': 1, 'timed_out': False}, True),    # e.g. the connection was lost while the Mac slept
+    ({'claude_exit': 0, 'timed_out': False}, False),
+    ({'claude_exit': -15, 'timed_out': True}, False),  # the time limit is a verdict, not an interruption
+    ({}, False),
+])
+def test_interrupted(rec: dict, expected: bool) -> None:
+    assert run.interrupted(rec) is expected
+
+
+def test_an_interrupted_verdict_is_dropped_from_the_state_to_be_retried(monkeypatch: pytest.MonkeyPatch,
+                                                                       tmp_path: Path) -> None:
+    monkeypatch.setattr(run, 'REPO', tmp_path)
+    case = tmp_path / run.CASES / 'bookworm'
+    case.mkdir(parents=True)
+    (case / 'A.prove.json').write_text(json.dumps({'claude_exit': 1, 'timed_out': False}))
+    (case / 'B.prove.json').write_text(json.dumps({'claude_exit': 0, 'timed_out': False}))
+    patches = {'A.patch': 'a', 'B.patch': 'b', 'C.patch': 'c'}
+    work = tmp_path / 'work'
+    assert run.retry_interrupted('debian/bookworm', patches, work, []) == {'B.patch': 'b', 'C.patch': 'c'}
+    for stamp in ('20261031T030000', '20261101T030000'):  # the third try was the last one
+        (work / 'leftover' / f'bookworm-A-{stamp}').mkdir(parents=True)
+    assert run.retry_interrupted('debian/bookworm', patches, work, []) == patches
+
+
+def test_an_interrupted_job_is_retried_until_the_third_time(tmp_path: Path) -> None:
+    (tmp_path / 'leftover').mkdir()
+    assert run.retries_left(tmp_path, 'bookworm-CVE-1')
+    for stamp in ('20261031T030000', '20261101T030000'):
+        (tmp_path / 'leftover' / f'bookworm-CVE-1-{stamp}').mkdir()
+    (tmp_path / 'leftover' / 'bookworm-CVE-10-20261031T030000').mkdir()  # another patch
+    assert not run.retries_left(tmp_path, 'bookworm-CVE-1')

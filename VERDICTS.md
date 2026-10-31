@@ -18,6 +18,7 @@ P0 on fixed = P0, restated on the fixed function, proved in Lean (PROTOCOL-auto.
 
 | Release | Patch | Verdict | Scope | Assumed external specs | Read-back | P0 on fixed | Notes |
 |---|---|---|---|---|---|---|---|
+| bookworm | `CVE-2023-27533.patch` | 証明できず | 場面を絞った（ユーザー名の側だけ。オプションの引数の側は可変長引数の sscanf のため扱わない） | U1 1 / U0 2 / D1 1 / D0 2 | 指摘なし | — | [CVE-2023-27533.md](research/backport-proof-debian/cases/bookworm/CVE-2023-27533.md) |
 | bookworm | `CVE-2023-27534.patch` | 対象外（大きさ） | — | — | — | — | `lib/curl_path.c` 75 lines |
 | bookworm | `CVE-2023-27535.patch` | 対象外（大きさ） | — | — | — | — | `lib/ftp.c`, `lib/setopt.c`, `lib/url.c` 47 lines |
 | bookworm | `CVE-2023-27537.patch` | C の変更が無い | — | — | — | — | 0 lines |

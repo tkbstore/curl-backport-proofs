@@ -1,0 +1,64 @@
+{
+ "patch": "CVE-2023-27533.patch",
+ "cve": "CVE-2023-27533",
+ "branch": "debian/bookworm",
+ "debian_commit": "81506830759fcf08d13ff6e36b5e3c8a8d6dee12",
+ "verdict": null,
+ "detail": "",
+ "debian_version": "7.88.1-10+deb12u15",
+ "base_tag": "curl-7_88_1",
+ "upstream_fixed": "538b1e79a6e7b0bb829ab4cecc828d32105d0684",
+ "upstream_parent": "674a0662cf937f2e3407e3d4237a41aa23ad5778",
+ "debian_patch_sha256": "960a17072a174fd22bf42e601dba0330c320eaacc0d4b767acfcc97b724e4cd6",
+ "target_file": "lib/telnet.c",
+ "series_applied": [
+  {
+   "patch": "CVE-2023-27533.patch",
+   "sha256": "960a17072a174fd22bf42e601dba0330c320eaacc0d4b767acfcc97b724e4cd6"
+  }
+ ],
+ "files": {
+  "U0": {
+   "lib/telnet.c": "6af54aeba2bb901679da156e47445dab8fac85305af65b95332698fbe723abfc"
+  },
+  "U1": {
+   "lib/telnet.c": "8d7647091de98db268868b82c1f99ee2dc93f181a40b87cbbcac278ccbd56d1f"
+  },
+  "D0": {
+   "lib/telnet.c": "70c35e3ce9b743ad63f9b87da59ed2b9a633310b074f05b0d1c06293c702f5fd"
+  },
+  "D1": {
+   "lib/telnet.c": "c94a20b0d70008a6d3f8d6bf7a49be8507ea6fe4cfad128aa7e2362ffb395f66"
+  }
+ },
+ "functions": {
+  "U": [
+   {
+    "name": "str_is_nonascii",
+    "before": false,
+    "after": true
+   },
+   {
+    "name": "check_telnet_options",
+    "before": true,
+    "after": true
+   }
+  ],
+  "D": [
+   {
+    "name": "str_is_nonascii",
+    "before": false,
+    "after": true
+   },
+   {
+    "name": "check_telnet_options",
+    "before": true,
+    "after": true
+   }
+  ]
+ },
+ "changes_outside_functions": {
+  "U": 0,
+  "D": 0
+ }
+}

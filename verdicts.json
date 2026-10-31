@@ -1,5 +1,29 @@
 [
  {
+  "review": "指摘なし",
+  "review_problems": [],
+  "review_summary": "言えること: 上流でも Debian bookworm のパッチでも、ユーザー名に 8ビット目の立ったバイトがあれば修正後は 43 で拒否し、環境変数のリストに何も足さない。修正前は同じ入力を拒否せずに USER 変数としてリストに足し、CURLE_OK を返す。言えないこと: telnet オプションの引数（TTYPE・XDISPLOC・NEW_ENV）の側は対象外で、P0 も、そのバイトが実際にリストの中身やサーバーへの送信に入ることまでは示していない（msnprintf の出力が未指定のため）。",
+  "release": "bookworm",
+  "patch": "CVE-2023-27533.patch",
+  "cve": "CVE-2023-27533",
+  "verdict": "証明できず",
+  "scope": "場面を絞った（ユーザー名の側だけ。オプションの引数の側は可変長引数の sscanf のため扱わない）",
+  "property_changed": false,
+  "p0_on_fixed": null,
+  "p0_on_fixed_theorems": [],
+  "external_specs": {
+   "U1": 1,
+   "U0": 2,
+   "D1": 1,
+   "D0": 2
+  },
+  "detail": "",
+  "c_files": null,
+  "changed_lines": null,
+  "record": "research/backport-proof-debian/cases/bookworm/CVE-2023-27533.json",
+  "notes": "research/backport-proof-debian/cases/bookworm/CVE-2023-27533.md"
+ },
+ {
   "review": null,
   "review_problems": [],
   "review_summary": "",

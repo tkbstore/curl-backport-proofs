@@ -1,7 +1,23 @@
 {
- "started": "2026-11-07T03:17:28+0900",
- "finished": "2026-11-07T03:33:50+0900",
- "ok": false,
- "error": "Users/shotan/.local/share/curl-backport-proofs/src/atrium-lean4/research/backport-proof-debian/auto/detect.py\", line 42, in fetch\n    with urllib.request.urlopen(url, timeout=60) as resp:\n         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/urllib/request.py\", line 189, in urlopen\n    return opener.open(url, data, timeout)\n           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\n  File \"/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/urllib/request.py\", line 489, in open\n    response = self._open(req, data)\n  File \"/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/urllib/request.py\", line 506, in _open\n    result = self._call_chain(self.handle_open, protocol, protocol +\n                              '_open', req)\n  File \"/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/urllib/request.py\", line 466, in _call_chain\n    result = func(*args)\n  File \"/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/urllib/request.py\", line 1367, in https_open\n    return self.do_open(http.client.HTTPSConnection, req,\n           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                        context=self._context)\n                        ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/urllib/request.py\", line 1322, in do_open\n    raise URLError(err)\nurllib.error.URLError: <urlopen error [Errno 54] Connection reset by peer>",
- "log": []
+ "started": "2026-11-08T03:00:06+0900",
+ "finished": "2026-11-08T04:10:23+0900",
+ "ok": true,
+ "error": null,
+ "log": [
+  "CVE-2023-27533.patch: 同じ性質 []",
+  "CVE-2023-27536.patch: left for a later pass (--max-proofs)",
+  "CVE-2023-27538.patch: left for a later pass (--max-proofs)",
+  "CVE-2023-28319.patch: left for a later pass (--max-proofs)",
+  "CVE-2023-28320.patch: left for a later pass (--max-proofs)",
+  "CVE-2023-38545.patch: left for a later pass (--max-proofs)",
+  "CVE-2023-46218.patch: left for a later pass (--max-proofs)",
+  "CVE-2024-2004.patch: left for a later pass (--max-proofs)",
+  "CVE-2024-2398.patch: left for a later pass (--max-proofs)",
+  "CVE-2025-0167.patch: left for a later pass (--max-proofs)",
+  "CVE-2025-10148.patch: left for a later pass (--max-proofs)",
+  "CVE-2025-14524.patch: left for a later pass (--max-proofs)",
+  "CVE-2026-3783.patch: left for a later pass (--max-proofs)",
+  "CVE-2026-3784.patch: left for a later pass (--max-proofs)",
+  "CVE-2026-7168.patch: left for a later pass (--max-proofs)"
+ ]
 }

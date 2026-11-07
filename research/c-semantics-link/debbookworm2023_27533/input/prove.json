@@ -1,0 +1,66 @@
+{
+ "patch": "CVE-2023-27533.patch",
+ "branch": "debian/bookworm",
+ "verdict": "証明できず",
+ "reasons": [
+  "ジョブの判定は「証明できず」",
+  "§4 の確認を通らない: 判定が「証明できず」で、theorems が空"
+ ],
+ "started": "2026-10-31 04:12:39",
+ "elapsed_s": 1509,
+ "builds": 4,
+ "timed_out": false,
+ "claude_exit": 1,
+ "worktree": "atrium-lean4-prove-bookworm-CVE-2023-27533",
+ "git_branch": "prove/bookworm-CVE-2023-27533",
+ "check": {
+  "build": {
+   "ok": true,
+   "detail": "lake build exit 0\n\nThe binding can be removed (if unused) or named `_` (if used implicitly).\n\nNote: This linter can be disabled with `set_option linter.unusedVariables false`\n\nThe binding can be removed (if unused) or named `_` (if used implicitly).\n\nNote: This linter can be disabled with `set_option linter.unusedVariables false`\n⚠ [142/251] Replayed Deb2026_8927Cells\n\nNote: This linter can be disabled with `set_option linter.unnecessarySimpa false`\n⚠ [153/251] Replayed Deb2026_7168Locals\n\nThe binding can be removed (if unused) or named `_` (if used implicitly).\ncount[auto-check]=7"
+  },
+  "probe_errors": [],
+  "summary": {
+   "合格": 0,
+   "不合格": 0,
+   "確認する定理が無い": 1
+  },
+  "cases": [
+   {
+    "case": "research/backport-proof-debian/cases/bookworm/CVE-2023-27533.json",
+    "patch": "CVE-2023-27533.patch",
+    "verdict": "証明できず",
+    "result": "確認する定理が無い",
+    "reasons": [
+     "判定が「証明できず」で、theorems が空"
+    ],
+    "axioms": {},
+    "d_found": {},
+    "scanned_files": []
+   }
+  ]
+ },
+ "review": {
+  "status": "指摘なし",
+  "problems": [],
+  "summary": "言えること: 上流でも Debian bookworm のパッチでも、ユーザー名に 8ビット目の立ったバイトがあれば修正後は 43 で拒否し、環境変数のリストに何も足さない。修正前は同じ入力を拒否せずに USER 変数としてリストに足し、CURLE_OK を返す。言えないこと: telnet オプションの引数（TTYPE・XDISPLOC・NEW_ENV）の側は対象外で、P0 も、そのバイトが実際にリストの中身やサーバーへの送信に入ることまでは示していない（msnprintf の出力が未指定のため）。",
+  "answers": {
+   "p1_states_fix": {
+    "ok": true,
+    "reason": "CVE の悪い出来事は、8ビット目の立ったバイト（IAC 0xFF など）を含むユーザー名やオプションの引数が、検査されずに telnet の副交渉に入ってサーバーへ送られること。P1 の結論は、ユーザー名にそのようなバイトがあれば修正後の check_telnet_options が 43（CURLE_BAD_FUNCTION_ARGUMENT）を返し、tn->telnet_vars と us_preferred[39] を含むメモリを変えない、というもの。つまり USER 変数がリストに入らないので、ユーザー名の側については悪い出来事が起きないことと対応している。hiBit は `*str & 0x80` を符号拡張込みで書いており、str_is_nonascii は仮定でなく本体から証明している。ただし主張はユーザー名の側だけで、オプションの引数を飛ばすことは述べていない。"
+   },
+   "p0_states_bug": {
+    "ok": true,
+    "reason": "P0 は、修正前の関数に同じ入力（8ビット目の立ったバイトを含むユーザー名、オプション無し）を与えると、拒否せずに curl_slist_append の結果を tn->telnet_vars に入れ、NEW_ENVIRON を有効にして CURLE_OK を返すことを述べている。修正前・後の違い（拒否か、受け入れてサーバーに送る変数リストに入れるか）は捉えている。ただし curl_msnprintf の仕様は『buf に何かを書く（中身は決めない）』なので、Lean の主張としては、その高位バイトが実際に buf を経由してリストの中身に入ることまでは言っていない。また、サーバーへの送信（副交渉）は範囲外。文書の日本語の『8ビット目の立ったバイトを含むユーザー名が、サーバーに送る変数に入る』は、Lean の形より強い。"
+   },
+   "scope_keeps_the_path": {
+    "ok": true,
+    "reason": "ユーザー名から USER 変数を経て telnet_vars に入る経路は残っているので、証明は脆弱性の経路の一つについて意味を持つ。P0 のオプション無しという絞り込みも、ユーザー名の処理がオプションのループより前にあるため経路を外していない。ただし CVE はユーザー名と telnet オプション（TTYPE・XDISPLOC・NEW_ENV など）の両方が対象で、修正の後半（sscanf の後の `if(str_is_nonascii(option_arg)) continue;`）は丸ごと対象外。オプションの引数から入る経路については何も言っていない。"
+   },
+   "specs_keep_the_behavior": {
+    "ok": true,
+    "reason": "仮定した外部関数の仕様は3つ。(1) strlen(conn->user) が j より大きい n を返し、メモリを変えない。位置 j までに NUL が無い C 文字列なら実際の strlen と矛盾せず、判定そのもの（str_is_nonascii）は本体から証明している。(2) curl_msnprintf は buf に何かを書く（中身は決めない）。(3) curl_slist_append は nb を返す。どちらも脆弱性の振る舞い（拒否するか受け入れるか）を仮定で決めてはいない。注意点は、(2) の中身が未指定なので P0 の『中身が届く』側を弱めていること。また (3) は確保の失敗（NULL）を扱わない成功時だけの仕様だが、これは P0 の場面を選んだだけで、修正の判定には関わらない。"
+   },
+   "summary": "言えること: 上流でも Debian bookworm のパッチでも、ユーザー名に 8ビット目の立ったバイトがあれば修正後は 43 で拒否し、環境変数のリストに何も足さない。修正前は同じ入力を拒否せずに USER 変数としてリストに足し、CURLE_OK を返す。言えないこと: telnet オプションの引数（TTYPE・XDISPLOC・NEW_ENV）の側は対象外で、P0 も、そのバイトが実際にリストの中身やサーバーへの送信に入ることまでは示していない（msnprintf の出力が未指定のため）。"
+  }
+ }
+}

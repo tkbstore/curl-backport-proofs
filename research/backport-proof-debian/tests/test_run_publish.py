@@ -228,6 +228,24 @@ def test_a_failed_pass_commits_only_its_report(git_repo: Path) -> None:
     assert 'a.txt' in run_git(public, 'status', '--porcelain')  # left as it was, not committed
 
 
+CONVENTIONAL = """#!/bin/sh
+head -n 1 "$1" | grep -Eq '^(feat|fix|refactor|docs|test|chore|perf|ci)(\\([a-z0-9_./-]+\\))?!?: .+'
+"""
+
+
+def test_the_failure_report_passes_a_conventional_commits_hook(git_repo: Path, tmp_path: Path) -> None:
+    """The public clone's commit-msg hook rejected 'state: …' on 2026-11-02, so the failure never
+    reached last-run.json and the old ok: true stayed published."""
+    public = _committed_repo(git_repo)
+    hooks = tmp_path / 'hooks'
+    hooks.mkdir()
+    (hooks / 'commit-msg').write_text(CONVENTIONAL)
+    (hooks / 'commit-msg').chmod(0o755)
+    run_git(public, 'config', 'core.hooksPath', str(hooks))
+    run.report_failure(public, {'ok': False, 'error': 'boom'}, push=False)
+    assert run_git(public, 'log', '-1', '--format=%s').strip() == 'chore: the last pass failed'
+
+
 @pytest.mark.parametrize('rec,expected', [
     ({'claude_exit': 1, 'timed_out': False}, True),    # e.g. the connection was lost while the Mac slept
     ({'claude_exit': 0, 'timed_out': False}, False),

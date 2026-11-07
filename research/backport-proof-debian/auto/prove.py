@@ -23,6 +23,7 @@ Usage:
 import argparse
 import json
 import os
+import re
 import shlex
 import shutil
 import signal
@@ -112,6 +113,28 @@ def commit(wt: Path, paths: list[str], message: str) -> None:
     git(wt, 'commit', '-q', '-m', f'{message}\n\n{CO_AUTHOR}')
 
 
+def clear_earlier_attempt(wt: Path, n: Names) -> None:
+    """A case proved again (§3.11) starts from the tree a first attempt sees: remove what the earlier
+    job committed. Every such path is named by names_for, so the case owns it by rule. The prefix
+    must not run into a digit: Deb…2023_2753 is another case than Deb…2023_27533."""
+    lean = 'research/c-semantics-link/lean'
+    module = re.compile(rf'(Gen)?{n.prefix}(?![0-9])\w*')
+    fixed = [n.tool_dir, n.case_md, n.case_json, n.case_json.removesuffix('.json') + '.prove.json']
+    paths = [p for p in fixed if (wt / p).exists()] + sorted(
+        f'{lean}/{p.name}' for p in (wt / lean).glob('*.lean') if module.fullmatch(p.stem))
+    lakefile = wt / lean / 'lakefile.toml'
+    text = lakefile.read_text() if lakefile.exists() else ''
+    kept = re.sub(rf',\s*"{module.pattern}"|"{module.pattern}",\s*', '', text)
+    if not paths and kept == text:
+        return
+    if paths:
+        git(wt, 'rm', '-r', '-q', '--', *paths)
+    if kept != text:
+        lakefile.write_text(kept)
+        git(wt, 'add', '--', f'{lean}/lakefile.toml')
+    git(wt, 'commit', '-q', '-m', f'chore: clear the earlier attempt at {n.stem} ({n.release})\n\n{CO_AUTHOR}')
+
+
 def prepare(case_dir: Path, n: Names, repo: Path) -> None:
     if n.worktree.exists():
         raise RuntimeError(f'{n.worktree} already exists; a job runs once per worktree')
@@ -119,6 +142,7 @@ def prepare(case_dir: Path, n: Names, repo: Path) -> None:
     lake = repo / 'research/c-semantics-link/lean/.lake'
     if lake.is_dir():
         shutil.copytree(lake, n.worktree / 'research/c-semantics-link/lean/.lake', symlinks=True)
+    clear_earlier_attempt(n.worktree, n)
     shutil.copytree(case_dir, n.worktree / n.input_dir)
     (n.worktree / n.case_md).parent.mkdir(parents=True, exist_ok=True)
     commit(n.worktree, [n.input_dir], f'chore: build.py inputs for {n.stem} ({n.release})')

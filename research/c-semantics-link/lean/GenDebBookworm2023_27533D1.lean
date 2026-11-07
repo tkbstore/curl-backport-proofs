@@ -4044,9 +4044,11 @@ def f_check_telnet_options : Function := {
                                                                     (Expr.Evar _sscanf 
                                                                     (Ty.Tfunction
                                                                     [(tptr tschar),
-                                                                    (tptr tschar)]
+                                                                    (tptr tschar),
+                                                                    (tptr tvoid),
+                                                                    (tptr tvoid)]
                                                                     tint
-                                                                    { cc_vararg := (some 2), cc_unproto := false, cc_structret := false }))
+                                                                    cc_default))
                                                                     [(Expr.Etempvar _t'18 (tptr tschar)),
                                                                     (Expr.Evar ___stringlit_2 (tarray tschar 21)),
                                                                     (Expr.Evar _option_keyword (tarray tschar 128)),
@@ -4272,9 +4274,11 @@ def f_check_telnet_options : Function := {
                                                                     (Expr.Evar _sscanf 
                                                                     (Ty.Tfunction
                                                                     [(tptr tschar),
-                                                                    (tptr tschar)]
+                                                                    (tptr tschar),
+                                                                    (tptr tvoid),
+                                                                    (tptr tvoid)]
                                                                     tint
-                                                                    { cc_vararg := (some 2), cc_unproto := false, cc_structret := false }))
+                                                                    cc_default))
                                                                     [(Expr.Evar _option_arg (tarray tschar 256)),
                                                                     (Expr.Evar ___stringlit_7 (tarray tschar 13)),
                                                                     (Expr.Eaddrof
@@ -4851,11 +4855,11 @@ def global_definitions : List (Ident × GlobDef FunDef Ty) :=
      cc_default)),
  (_sscanf,
    GlobDef.Gfun (FunDef.External (ExtFun.EF_external "sscanf"
-                                   (mksignature [XType.Xptr, XType.Xptr]
-                                     XType.Xint
-                                     { cc_vararg := (some 2), cc_unproto := false, cc_structret := false }))
-     [(tptr tschar), (tptr tschar)] tint
-     { cc_vararg := (some 2), cc_unproto := false, cc_structret := false })),
+                                   (mksignature
+                                     [XType.Xptr, XType.Xptr, XType.Xptr,
+                                      XType.Xptr] XType.Xint cc_default))
+     [(tptr tschar), (tptr tschar), (tptr tvoid), (tptr tvoid)] tint
+     cc_default)),
  (_str_is_nonascii, GlobDef.Gfun (FunDef.Internal f_str_is_nonascii)),
  (_check_telnet_options, GlobDef.Gfun (FunDef.Internal f_check_telnet_options)),
  (_debbookworm2023_27533_keep, GlobDef.Gvar v_debbookworm2023_27533_keep)]

@@ -51,10 +51,20 @@ def commit(paths: list[str], message: str) -> None:
 
 
 def tool(name: str, *args: str, stdin: str = '', cwd: Path = HERE) -> list[dict]:
+    """Run one of the tools and parse what it printed. Any other exit than 0 is a failure, except
+    prove.py's 1 with its document printed (the proof ran; the verdict is not 同じ性質): a tool that
+    died on an uncaught exception (no network while the Mac slept) also exits 1, and reading its
+    output as complete would turn the failure into 'nothing to do'."""
     proc = subprocess.run([sys.executable, str(HERE / name), *args], input=stdin, cwd=cwd,
                           capture_output=True, text=True)
-    if proc.returncode not in (0, 1):
-        raise RuntimeError(f'{name} exit {proc.returncode}: {proc.stderr.strip()[-1500:]}')
+    failed = RuntimeError(f'{name} exit {proc.returncode}: {proc.stderr.strip()[-1500:]}')
+    if proc.returncode == 1 and name == 'prove.py':
+        try:
+            return [json.loads(proc.stdout)]
+        except json.JSONDecodeError:
+            raise failed from None
+    if proc.returncode != 0:
+        raise failed
     try:  # prove.py prints one indented document; the others print JSON lines
         return [json.loads(proc.stdout)]
     except json.JSONDecodeError:
@@ -240,7 +250,7 @@ def report_failure(public: Path, rec: dict, push: bool) -> None:
     rel = 'state/last-run.json'
     (public / 'state').mkdir(exist_ok=True)
     (public / rel).write_text(json.dumps(rec, ensure_ascii=False, indent=1) + '\n')
-    for args in (['add', '--', rel], ['commit', '-q', '-m', f'state: the last pass failed\n\n{CO_AUTHOR}', '--', rel]):
+    for args in (['add', '--', rel], ['commit', '-q', '-m', f'chore: the last pass failed\n\n{CO_AUTHOR}', '--', rel]):
         subprocess.run(['git', '-C', str(public), *args], check=True, capture_output=True)
     if push:
         branch = subprocess.run(['git', '-C', str(public), 'symbolic-ref', '--short', 'HEAD'], check=True,

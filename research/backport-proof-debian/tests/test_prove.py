@@ -8,6 +8,7 @@ import pytest
 
 import check
 import prove
+from conftest import run_git
 
 HERE = Path(__file__).resolve().parents[1]
 BUILD_SH = HERE.parents[0] / 'c-semantics-link' / 'lean' / 'build.sh'
@@ -146,3 +147,50 @@ def test_the_jobs_last_message_names_why_it_ended(tmp_path: Path) -> None:
     log.write_text('noise\n{"type":"result","is_error":true,"result":"API Error: Connection lost while your computer was asleep"}\n')
     assert prove.last_result(log) == 'API Error: Connection lost while your computer was asleep'
     assert prove.last_result(tmp_path / 'none.log') == ''
+
+
+def _tree_with_an_earlier_attempt(repo: Path, n: prove.Names) -> None:
+    """HEAD after an interrupted job on this case was merged (bookworm CVE-2023-27533, 2026-10-31)."""
+    lean = repo / 'research/c-semantics-link/lean'
+    files = {f'{n.input_dir}/D0/lib/url.c': 'old', f'{n.tool_dir}/prelude.h': 'old',
+             n.case_md: 'old property', n.case_json: '{}',
+             n.case_json.removesuffix('.json') + '.prove.json': '{}',
+             **{f'research/c-semantics-link/lean/{name}.lean': '' for name in (
+                 f'Gen{n.prefix}D0', f'{n.prefix}Common', f'{n.prefix}0D0', 'Case5')}}
+    for rel, text in files.items():
+        (repo / rel).parent.mkdir(parents=True, exist_ok=True)
+        (repo / rel).write_text(text)
+    (lean / 'lakefile.toml').write_text(
+        f'roots = ["Case5", "Gen{n.prefix}D0", "{n.prefix}0D0", "{n.prefix}Common"]\n')
+    run_git(repo, 'add', '-A')
+    run_git(repo, 'commit', '-q', '-m', 'chore: earlier attempt')
+
+
+def test_a_retry_starts_from_the_tree_a_first_attempt_sees(git_repo: Path, tmp_path: Path) -> None:
+    n = prove.names_for({**MANIFEST, 'branch': 'debian/bookworm'}, git_repo)
+    _tree_with_an_earlier_attempt(git_repo, n)
+    case_dir = tmp_path / 'case'
+    (case_dir / 'D0' / 'lib').mkdir(parents=True)
+    (case_dir / 'D0' / 'lib' / 'url.c').write_text('new')
+    prove.prepare(case_dir, n, git_repo)
+    wt = n.worktree
+    lean = wt / 'research/c-semantics-link/lean'
+    assert (wt / n.input_dir / 'D0/lib/url.c').read_text() == 'new'
+    assert not (wt / n.tool_dir / 'prelude.h').exists() and not (wt / n.case_md).exists()
+    assert not (wt / n.case_json).exists()
+    assert sorted(p.name for p in lean.glob('*.lean')) == ['Case5.lean', f'{n.prefix}0D0.lean']
+    assert (lean / 'lakefile.toml').read_text() == f'roots = ["Case5", "{n.prefix}0D0"]\n'
+    assert run_git(wt, 'status', '--porcelain') == ''
+
+
+def test_a_first_attempt_adds_no_clearing_commit(git_repo: Path, tmp_path: Path) -> None:
+    (git_repo / 'README').write_text('x')
+    run_git(git_repo, 'add', 'README')
+    run_git(git_repo, 'commit', '-q', '-m', 'chore: init')
+    n = prove.names_for(MANIFEST, git_repo)
+    case_dir = tmp_path / 'case'
+    case_dir.mkdir()
+    (case_dir / 'manifest.json').write_text('{}')
+    prove.prepare(case_dir, n, git_repo)
+    assert run_git(n.worktree, 'log', '--format=%s').splitlines() == [
+        f'chore: build.py inputs for {n.stem} ({n.release})', 'chore: init']

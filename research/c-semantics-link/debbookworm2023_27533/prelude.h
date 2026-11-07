@@ -16,7 +16,7 @@
  *   strcasecompare・strncasecompare は Curl_strcasecompare・Curl_strncasecompare（lib/strcase.h）、failf は Curl_failf（lib/sendf.h）
  * - CURLcode は include/curl/curl.h（curl-7_88_1）の値のうち、対象の関数が使う5つだけを並べた
  * - 呼ばれる側の関数は extern の宣言（仕様は Lean 側で定理の仮定として与える）
- * - 逸脱: curl_msnprintf の宣言を、可変長でなく4つの固定の引数にした（宣言の前の注を見よ）
+ * - 逸脱: curl_msnprintf・sscanf の宣言を、可変長でなく4つの固定の引数にした（宣言の前の注を見よ）
  */
 #define NULL ((void *)0)
 #define TRUE 1
@@ -92,7 +92,7 @@ struct Curl_easy {
 extern size_t strlen(const char *s);
 /* 逸脱: curl_msnprintf は可変長引数（include/curl/mprintf.h）。Clight の呼び出しの規則は宣言の型の並びと引数の数が合わないと
  * 進めない（research/c-semantics-link/RESULTS.md の Case 3 の記録）。この関数での呼び出しは4つの引数の1か所だけなので、
- * その4つを並べた固定の引数の宣言にした。仕様は Lean 側で仮定する。sscanf・Curl_failf は性質の経路に無いので可変長のまま */
+ * その4つを並べた固定の引数の宣言にした。仕様は Lean 側で仮定する。Curl_failf は性質の経路に無いので可変長のまま */
 extern int curl_msnprintf(char *buffer, size_t maxlength, const char *format, const char *arg);
 extern struct curl_slist *curl_slist_append(struct curl_slist *list, const char *data);
 extern void curl_slist_free_all(struct curl_slist *list);
@@ -103,5 +103,7 @@ extern char *strchr(const char *s, int c);
 extern char *strncpy(char *dest, const char *src, size_t n);
 extern unsigned long strtoul(const char *nptr, char **endptr, int base);
 extern int atoi(const char *nptr);
-extern int sscanf(const char *str, const char *format, ...);
+/* 逸脱: sscanf は可変長引数。curl_msnprintf と同じ理由で固定の宣言にした。対象の関数の呼び出しはどれも4つの引数なので
+ * （D の分解は char * を2つ、D の WS の枝は unsigned short * を2つ渡す）、後ろの2つは void * にした */
+extern int sscanf(const char *str, const char *format, void *a, void *b);
 extern char Curl_raw_tolower(char in);

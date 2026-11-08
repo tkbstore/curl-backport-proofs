@@ -1,23 +1,7 @@
 {
- "started": "2026-11-08T03:00:06+0900",
- "finished": "2026-11-08T04:10:23+0900",
- "ok": true,
- "error": null,
- "log": [
-  "CVE-2023-27533.patch: 同じ性質 []",
-  "CVE-2023-27536.patch: left for a later pass (--max-proofs)",
-  "CVE-2023-27538.patch: left for a later pass (--max-proofs)",
-  "CVE-2023-28319.patch: left for a later pass (--max-proofs)",
-  "CVE-2023-28320.patch: left for a later pass (--max-proofs)",
-  "CVE-2023-38545.patch: left for a later pass (--max-proofs)",
-  "CVE-2023-46218.patch: left for a later pass (--max-proofs)",
-  "CVE-2024-2004.patch: left for a later pass (--max-proofs)",
-  "CVE-2024-2398.patch: left for a later pass (--max-proofs)",
-  "CVE-2025-0167.patch: left for a later pass (--max-proofs)",
-  "CVE-2025-10148.patch: left for a later pass (--max-proofs)",
-  "CVE-2025-14524.patch: left for a later pass (--max-proofs)",
-  "CVE-2026-3783.patch: left for a later pass (--max-proofs)",
-  "CVE-2026-3784.patch: left for a later pass (--max-proofs)",
-  "CVE-2026-7168.patch: left for a later pass (--max-proofs)"
- ]
+ "started": "2026-11-09T03:03:58+0900",
+ "finished": "2026-11-09T03:37:50+0900",
+ "ok": false,
+ "error": "ection, req,\n           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                        context=self._context)\n                        ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/urllib/request.py\", line 1323, in do_open\n    r = h.getresponse()\n  File \"/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/http/client.py\", line 1430, in getresponse\n    response.begin()\n    ~~~~~~~~~~~~~~^^\n  File \"/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/http/client.py\", line 331, in begin\n    version, status, reason = self._read_status()\n                              ~~~~~~~~~~~~~~~~~^^\n  File \"/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/http/client.py\", line 292, in _read_status\n    line = str(self.fp.readline(_MAXLINE + 1), \"iso-8859-1\")\n               ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\n  File \"/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/socket.py\", line 719, in readinto\n    return self._sock.recv_into(b)\n           ~~~~~~~~~~~~~~~~~~~~^^^\n  File \"/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/ssl.py\", line 1304, in recv_into\n    return self.read(nbytes, buffer)\n           ~~~~~~~~~^^^^^^^^^^^^^^^^\n  File \"/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/ssl.py\", line 1138, in read\n    return self._sslobj.read(len, buffer)\n           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\nConnectionResetError: [Errno 54] Connection reset by peer",
+ "log": []
 }
